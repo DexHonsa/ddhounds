@@ -1,0 +1,43 @@
+
+<div>
+
+<div style="background:#d6d9db; padding:15px;">
+    <v-select style="max-width:420px;" :color="$vuetify.theme.lightGreen" label="Mail Type" v-model="mail_type" :items="types">
+    </v-select>
+</div>
+<div v-if="!isLoading" style="width:100%;display:flex; justify-content: center; align-items: flex-start; padding:65px">
+    <canvas v-if="mail_type == 'Initial Demand' && !isLoading" style="box-shadow: 0px 10px 20px 10px rgba(0,0,0,0.2);" id="init_demand"></canvas>
+    <div v-if="mail_type != 'Initial Demand'" style="padding:15px; height:200px; width:100%; padding-top:50px; text-align: center; ">
+        <div>Form For {{mail_type}}</div>
+        <div :class="$style.classForm">
+            <div :class="$style.row">
+                <v-text-field :color="$vuetify.theme.lightGreen" label="First Name" v-model="data.first_name"></v-text-field>
+                <v-text-field :color="$vuetify.theme.lightGreen" style="margin-left:10px;" label="Middle Name" v-model="data.middle_name"></v-text-field>
+                <v-text-field :color="$vuetify.theme.lightGreen" style="margin-left:10px;" label="Last Name" v-model="data.last_name"></v-text-field>
+            </div>
+            <div :class="$style.row">
+                <v-text-field :color="$vuetify.theme.lightGreen" label="Street 1" v-model="data.street1"></v-text-field>
+                <v-text-field :color="$vuetify.theme.lightGreen" style="margin-left:10px;" label="Street 2" v-model="data.street2"></v-text-field>
+                
+            </div>
+            <div :class="$style.row">
+                <v-text-field :color="$vuetify.theme.lightGreen"  label="City" v-model="data.city"></v-text-field>
+                <v-text-field :color="$vuetify.theme.lightGreen" style="margin-left:10px;" label="State" v-model="data.state"></v-text-field>
+                <v-text-field :color="$vuetify.theme.lightGreen" style="margin-left:10px;" label="Zip" v-model="data.zip"></v-text-field>
+            </div>
+            
+            <v-text-field :color="$vuetify.theme.lightGreen" label="Account Number" v-model="data.account_number"></v-text-field>
+            <v-text-field v-if="mail_type == 'Payment Receipt'" :color="$vuetify.theme.lightGreen" label="Payment Amount" @input="updateRemainingBalance" @change="doneRemainingBalance" type="number" v-model="data.amount"></v-text-field>
+            <v-text-field :color="$vuetify.theme.lightGreen" label="Remaining Balance" v-model="data.remaining_balance"></v-text-field>
+            <v-text-field :color="$vuetify.theme.lightGreen" label="Payment Method" v-model="data.payment_method"></v-text-field>
+            
+            
+        </div><br>
+        
+        <v-btn @click="exportDocx" dark :color="$vuetify.theme.lightGreen">Generate Mail</v-btn>
+    </div>
+    <v-btn  v-if="mail_type == 'Initial Demand' && !isLoading" @click="exportPDF" dark :color="$vuetify.theme.lightGreen" >Generate Mail</v-btn>
+    
+</div>
+
+</div>

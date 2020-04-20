@@ -1,0 +1,140 @@
+<div :class="$style.container">
+    <v-dialog v-model="dialog" persistent max-width="600px">
+        <v-card>
+          <v-card-title>
+            <span class="headline">Change Password</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-row>
+                <v-col cols="12" sm="6" md="4">
+                  <v-text-field
+                    label="New Password*"
+                    v-model="newPassword"
+                    persistent-hint
+                    :color="$vuetify.theme.lightGreen"
+                    required
+                  ></v-text-field>
+                </v-col>
+                
+              </v-row>
+            </v-container>
+            <small>*indicates required field</small>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            
+              
+                <v-btn slot="activator" color="blue darken-1" dark text @click="dialog = false">Close</v-btn>
+              
+            
+            <v-btn :loading="changePasswordLoading" :color="$vuetify.theme.lightGreen" dark text @click="submitChangePassword()">Change Password</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+  <div>
+    <div :class="$style.name">User Management </div>
+  </div>
+  <v-tabs background-color="transparent" color="basil"  v-model="tab">
+    <v-tab  >Active Users</v-tab>
+    <v-tab >Archived</v-tab>
+  </v-tabs>
+
+  <transition enter-active-class="fadeInUp" leave-active-class="fadeOut">
+    <div v-if="!isLoaded" class="loaderContainer animated-fast">
+      <div class="wrapper">
+        <div class="wrapper-cell">
+          <div class="image"></div>
+          <div class="text">
+            <div class="text-line"></div>
+            <div class="text-line"></div>
+            <div class="text-line"></div>
+            <div class="text-line"></div>
+          </div>
+        </div>
+        <div class="wrapper-cell">
+          <div class="image"></div>
+          <div class="text">
+            <div class="text-line"></div>
+            <div class="text-line"></div>
+            <div class="text-line"></div>
+            <div class="text-line"></div>
+          </div>
+        </div>
+        <div class="wrapper-cell">
+          <div class="image"></div>
+          <div class="text">
+            <div class="text-line"></div>
+            <div class="text-line"></div>
+            <div class="text-line"></div>
+            <div class="text-line"></div>
+          </div>
+        </div>
+        <div class="wrapper-cell">
+          <div class="image"></div>
+          <div class="text">
+            <div class="text-line"></div>
+            <div class="text-line"></div>
+            <div class="text-line"></div>
+            <div class="text-line"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
+  <div v-if="isLoaded" :class="$style.userContainer">
+    <div v-for="(user, i) in users" :key="i" :class="$style.userItem">
+
+      <div v-if="editIndex != i">
+        <div :class="$style.userName"><span style="text-transform: capitalize;">{{user.first_name}} {{user.last_name}}</span><br><span
+            :class="$style.email">{{user.email}}</span></div>
+        <div :class="[$style.roleTag,$style[user.role]]">{{user.role}}</div>
+        <div @click="$router.push('/user_activity/' + user._id)" :class="$style.userActivity">User Activiy</div>
+      </div>
+      <div v-if="editIndex == i">
+        <div style="display:flex; align-items: center">
+
+          <v-text-field disabled v-model="editUser.first_name" :class="$style.input" :color="$vuetify.theme.lightGreen"
+            label="First Name" required v-validate="'required'"></v-text-field>
+          <v-text-field disabled v-model="editUser.last_name" :class="$style.input" :color="$vuetify.theme.lightGreen"
+            label="Last Name" required v-validate="'required'"></v-text-field>
+          <v-text-field v-model="editUser.email" :class="$style.input" :color="$vuetify.theme.lightGreen" label="Email"
+            required v-validate="'required'"></v-text-field>
+          <v-select required v-model="editUser.role" :class="[$style.input]" :color="$vuetify.theme.lightGreen"
+            :items="['agent','admin']" label="Role" v-validate="'required'"></v-select>
+          <v-text-field required v-if="newUserEdit" v-model="editUser.password" :class="$style.input"
+            :color="$vuetify.theme.lightGreen" label="Password" v-validate="'required'"></v-text-field>
+          <div :class="$style.error" v-if="hasError">{{errorMessage}}</div>
+        </div>
+        <div style="display:flex; align-items: center">
+
+        </div>
+      </div>
+      <div v-if="tab == 0" style="margin-left:auto">
+        <v-tooltip top>
+          <span>Change Password</span>
+          <v-btn  slot="activator"  v-if="isAdmin" @click="changePasswordId = user._id, changePassword()" small fab depressed dark :color="'#aeaeae'"><i class="fal fa-lock"></i></v-btn>
+        </v-tooltip>
+          <v-tooltip top>
+            <span v-if="editIndex != i">Edit User</span >
+              <span v-if="editIndex == i && !isLoading">Save Changes</span >
+          <v-btn slot="activator"  @click="toggleUserEdit(user._id, i)" small fab depressed dark :color="editIndex == i && !isLoading ? $vuetify.theme.lightGreen :'#aeaeae'"><i v-if="editIndex != i" class="fal fa-pencil"></i>
+          <i v-if="editIndex == i && !isLoading" class="fa fa-save"></i></v-btn slot="activator"></v-tooltip>
+          <v-tooltip top>
+            <span>Archive User</span>
+          <v-btn slot="activator" @click="deleteUser" v-if="editIndex == i && !isLoading" small fab depressed dark :color="'#aeaeae'">
+            <i v-if="editIndex == i && !isLoading" class="fal fa-times"></i>
+          </v-btn>
+          </v-tooltip>
+      </div>
+
+    </div>
+  </div>
+  <v-tooltip v-if="tab == 0" top>
+    <span>Add User</span>
+    <v-btn slot="activator" fab depressed small :color="$vuetify.theme.lightGreen" dark @click="addUser">
+      <i class="fa fa-plus"></i>
+    </v-btn>
+  </v-tooltip>
+
+</div>

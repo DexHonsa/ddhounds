@@ -1,0 +1,74 @@
+.container{
+    padding:55px;
+    position: relative;
+}
+.details{
+   
+}
+.name{
+    font-weight: bold;
+    font-size: 20pt;
+}
+.email{
+    color:#808080;
+    font-size: .7em;
+    font-weight: 300;
+    display: block;
+}
+.userContainer{
+    margin-top:45px;
+}
+.userItem{
+    padding:15px;
+    display:flex; 
+    align-items: center;
+    position: relative;
+    background:#e3e6e7;
+    border-radius: 5px;
+    margin-bottom:15px;
+    transition:all .3s ease;
+}
+.userItem:hover{
+    box-shadow: 1px 25px 20px -20px rgba(0,0,0,0.2);
+    transform:scale(1.02,1.02);
+    z-index: 100;
+}
+.userName{
+    font-size:15pt;
+    font-weight: bold;
+    background:#24b47e20;
+}
+.userDate{
+    font-size: .8em;
+    color:#808080;
+    font-weight: 300;
+}
+.userDetail{
+    font-size:12pt;
+}
+.roleTag{
+    margin-top:10px;
+    width:min-content;
+    background:#24b47e;
+    color:#fff;
+    height:25px;
+    padding:0px 20px;
+    border-radius: 50px;
+    font-size: 10pt;
+    display:inline-block;
+    display:flex;
+    align-items: center;
+}
+.input{
+    margin-right:10px;
+    flex:1;
+}
+.admin{
+    background:rgb(21, 193, 236) !important
+}
+.error{
+    position: absolute;
+    bottom:5px;
+    color:#d85555;
+    font-size:8pt;
+}

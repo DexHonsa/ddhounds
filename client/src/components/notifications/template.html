@@ -1,0 +1,61 @@
+<div :class="$style.container">
+    <div>
+        <div :class="$style.name">Notifications </div>
+    </div>
+    
+    <transition enter-active-class="fadeInUp" leave-active-class="fadeOut">
+            <div v-if="!isLoaded" class="loaderContainer animated-fast">
+                    <div class="wrapper">
+                      <div class="wrapper-cell">
+                        <div class="image"></div>
+                        <div class="text">
+                          <div class="text-line"></div>
+                          <div class="text-line"></div>
+                          <div class="text-line"></div>
+                          <div class="text-line"></div>
+                        </div>
+                      </div>
+                      <div class="wrapper-cell">
+                        <div class="image"></div>
+                        <div class="text">
+                          <div class="text-line"></div>
+                          <div class="text-line"></div>
+                          <div class="text-line"></div>
+                          <div class="text-line"></div>
+                        </div>
+                      </div>
+                      <div class="wrapper-cell">
+                        <div class="image"></div>
+                        <div class="text">
+                          <div class="text-line"></div>
+                          <div class="text-line"></div>
+                          <div class="text-line"></div>
+                          <div class="text-line"></div>
+                        </div>
+                      </div>
+                      <div class="wrapper-cell">
+                        <div class="image"></div>
+                        <div class="text">
+                          <div class="text-line"></div>
+                          <div class="text-line"></div>
+                          <div class="text-line"></div>
+                          <div class="text-line"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+    </transition>
+    <div v-if="isLoaded" :class="$style.userContainer">
+        <div v-for="(note, i) in notifications" :key="i" :class="$style.userItem" >
+                
+            <div>
+                <div :class="[$style.userName, {'error': note.code == 'error'}]" v-html="note.body"></div>
+                <!-- <div :class="[$style.roleTag,$style[user.role]]">{{user.role}}</div> -->
+            </div>
+            
+            
+        
+        </div>
+    </div>
+
+</div>

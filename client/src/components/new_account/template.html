@@ -1,0 +1,27 @@
+<div :class="$style.container">
+    <div v-if="!user.logged_in" :class="$style.loginForm">
+        <div :class="$style.innerForm">
+        <div :class="$style.loginLogo">
+                <img src="../../img/logo.png" alt=""></div>
+        
+        <div>
+            <div style="display:flex;">
+                <v-text-field class="animated-fast fadeInUp" v-model="password" style="margin-right:10px;" background-color="transparent" :color="$vuetify.theme.lightGreen" type="password" label="New Password"></v-text-field>
+            </div>
+            <v-btn @click="register" :class="$style.loginBtn" dark :color="$vuetify.theme.lightGreen" depressed><span style="text-transform: none">Set Password</span></v-btn>
+            <transition enter-active-class="shake" leave-active-class="fadeOut">
+                <div :class="$style.errorMessage" class="animated" v-if="hasError">{{errorMessage}}</div>
+            </transition>
+            <transition enter-active-class="tada" leave-active-class="fadeOut">
+                    <div :class="$style.successMessage" class="animated" v-if="hasSuccess">{{successMessage}}</div>
+            </transition>
+            <v-btn v-if="displaySuccessButton" :class="$style.loginBtn" @click="$router.push('/')" :color="$vuetify.theme.lightGreen" dark depressed>Go to Login</v-btn>
+        </div>
+    </div>
+        
+    </div>
+    <div v-else>
+        <div style="padding:15px; background:#fff;border-radius:5px;text-align:center; font-size:15pt; font-weight:bold;">Link has expired.</div>
+    </div>
+    
+</div>

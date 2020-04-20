@@ -1,0 +1,20 @@
+.histItem{
+    display:flex;
+    padding:15px;
+}
+.histUser{
+    margin-right:50px;
+}
+.histValue{
+    margin-left:auto;
+}
+.histDate{
+    margin-right:40px;
+}
+.newVal {
+    background:#eaeaea;
+    padding:7px 15px;
+    margin-left:10px;
+    font-weight: bold;
+    border-radius: 15px;
+}

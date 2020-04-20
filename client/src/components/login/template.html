@@ -1,0 +1,25 @@
+<div :class="$style.container">
+    <div id="container"></div>
+    <div class="animated zoomIn" :class="$style.loginForm">
+    <div :class="$style.innerForm">
+        <div class="animated fadeInDown" :class="$style.loginLogo">
+                <img src="../../img/mini_logo.png" alt=""><br>
+            Seasons Portal
+        </div>
+        <div>
+            <form @submit.prevent="login">
+            <v-text-field class="animated fadeInLeft" v-model="email" background-color="transparent" :color="$vuetify.theme.lightGreen" label="Email"></v-text-field>
+            <v-text-field class="animated fadeInRight" v-model="password" background-color="transparent" :color="$vuetify.theme.lightGreen" type="password" label="Password"></v-text-field>
+            <v-btn :loading="isLoading" type="submit" :class="$style.loginBtn" dark :color="$vuetify.theme.lightGreen" depressed><span style="text-transform: none">Login</span></v-btn>
+        </form>
+            <transition enter-active-class="shake" leave-active-class="fadeOut">
+                <div :class="$style.errorMessage" class="animated" v-if="hasError">{{errorMessage}}</div>
+            </transition>
+        </div>
+    </div>
+        <div style="width:100%; color:#fff; text-align:center; font-size:10pt;padding:15px; background:#2a5371">
+                Forgot Password? <div @click="$router.push('/forgot')" :class="$style.link">Click here</div>
+        </div>
+    </div>
+    
+</div>

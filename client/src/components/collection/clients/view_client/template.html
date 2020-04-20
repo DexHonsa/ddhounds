@@ -1,0 +1,704 @@
+<div class="inner-stage" style="display:flex; padding:0;">
+    
+    <transition enter-active-class="fadeInUp" leave-active-class="fadeOut">
+        <div v-if="!isLoaded" class="loaderContainer animated-fast"><img src="@/img/double_loader.svg" alt=""></div>
+    </transition>
+    <div v-if="isLoaded" class="inner-stage">
+        <ViewMail v-if="viewMail" :hide="hideViewMail" :activeViewMail="activeViewMail" />
+        <ClientHistory :history="history" :prop="activeHistoryProp" v-if="clientHistoryOpen"
+            :hide="toggleClientHistory" />
+
+        <div :class="$style.formContainer">
+
+            
+            <v-form ref="form" lazy-validation>
+                <div v-if="model.status == 'Cease and Desist'" :class="$style.ceastAndDesist"><i
+                        class="fal fa-exclamation-triangle"></i> Cease And Desist</div>
+                <div v-if="activeModel.dispute_end_date && activeModel.active_dispute" class="exp2"
+                    :class="[{'_good':  40 < getDaysLeft(activeModel.dispute_end_date)}, {'_okay': 40 >= getDaysLeft(activeModel.dispute_end_date) && getDaysLeft(activeModel.dispute_end_date)  > 10}, {'_bad': 0 < getDaysLeft(activeModel.dispute_end_date) && getDaysLeft(activeModel.dispute_end_date) <= 10}, {'_expired': 0 >= getDaysLeft(activeModel.dispute_end_date)}]">
+                    <span
+                        v-if="0 < getDaysLeft(activeModel.dispute_end_date)">{{getDaysLeft(activeModel.dispute_end_date)}}
+                        Days Until Dispute Expiration</span>
+                    <span v-if="0 >= getDaysLeft(activeModel.dispute_end_date)">Dispute has expired</span>
+                </div>
+                <!--Basic Information-->
+                <div :class="$style.container2">
+                    <div :class="$style.containerTitle">Basic Information</div>
+                    <div :class="$style.container3">
+                        <div style="max-width:500px;" :class="$style['account-item-container']">
+
+                            <div class="account-item">
+                                <div class="account-item-label">Name</div>
+                                <div class="account-item-value">{{humanize(activeModel['first_name'])}}
+                                    {{humanize(activeModel['middle_name'])}} {{humanize(activeModel['last_name'])}}
+                                </div>
+                            </div>
+                            <div class="account-item">
+                                <div class="account-item-label">Address</div>
+                                <div class="account-item-value">{{activeModel['street1']}}
+                                    {{activeModel['street2']}}<br>
+                                    {{activeModel['city']}} {{activeModel['state']}}, {{activeModel['zip']}}</div>
+                            </div>
+                            <div class="account-item">
+                                <div class="account-item-label">
+                                    <v-tooltip v-if="!meta.phone" top>
+                                        <div>mark as wrong</div>
+                                        <i slot="activator" style="cursor: pointer;" @click="updateMeta({phone:true})"
+                                            class="fal fa-times"></i>
+
+                                    </v-tooltip>
+                                    <v-tooltip v-if="meta.phone" top>
+                                        <div>mark as correct</div>
+                                        <i slot="activator" style="cursor: pointer;" @click="updateMeta({phone:false})"
+                                            class="fal fa-check"></i>
+
+                                    </v-tooltip>
+
+                                    &nbsp;&nbsp;
+                                    Phone
+                                </div>
+                                <v-tooltip top>
+                                    <div v-if="meta.phone">Wrong #</div>
+                                    <div v-else>Phone is Gucci</div>
+                                    <div slot="activator" class="account-item-value"
+                                        :style="meta.phone ? 'color:#ff0000':null">{{activeModel['phone'] }}</div>
+
+
+                                </v-tooltip>
+
+                            </div>
+                            <div class="account-item">
+                                <div class="account-item-label">
+                                    <v-tooltip v-if="!meta.cellphone" top>
+                                        <div>mark as wrong</div>
+                                        <i slot="activator" style="cursor: pointer;"
+                                            @click="updateMeta({cellphone:true})" class="fal fa-times"></i>
+
+                                    </v-tooltip>
+                                    <v-tooltip v-if="meta.cellphone" top>
+                                        <div>mark as correct</div>
+                                        <i slot="activator" style="cursor: pointer;"
+                                            @click="updateMeta({cellphone:false})" class="fal fa-check"></i>
+
+                                    </v-tooltip>
+
+                                    &nbsp;&nbsp;
+                                    Cell
+                                </div>
+                                <v-tooltip top>
+                                    <div v-if="meta.cellphone">Wrong #</div>
+                                    <div v-else>Phone is Gucci</div>
+                                    <div slot="activator" class="account-item-value"
+                                        :style="meta.cellphone ? 'color:#ff0000':null">{{activeModel['cellphone'] }}
+                                    </div>
+
+
+                                </v-tooltip>
+                            </div>
+                            <div class="account-item">
+                                <div class="account-item-label">Email</div>
+                                <div class="account-item-value">{{activeModel['email'] }}</div>
+                            </div>
+                        </div>
+                        <div :class="$style['account-item-container']" style="width:100%;">
+                            <div class="account-item">
+                                <div class="account-item-label">D.O.B.</div>
+                                <div class="account-item-value">{{activeModel['dob'] }}</div>
+                            </div>
+                            <div class="account-item">
+                                <div class="account-item-label">ssn</div>
+                                <div class="account-item-value">{{activeModel['ssn'] }}</div>
+                            </div>
+                            <div class="account-item">
+                                <div class="account-item-label">DL #</div>
+                                <div class="account-item-value">{{activeModel['drivers_license_number'] }}</div>
+                            </div>
+                            <div class="account-item">
+                                <div class="account-item-label">DL state</div>
+                                <div class="account-item-value">{{activeModel['drivers_license_state'] }}</div>
+                            </div>
+                            
+                            <div class="account-item">
+                                <div class="account-item-label">Date of Notice</div>
+                                <div class="account-item-value">{{activeModel['date_of_notice'] }}</div>
+                            </div>
+                            <div class="account-item">
+                                <div class="account-item-label">Status</div>
+                                <div class="account-item-value">{{activeModel['status'] }}</div>
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+                <div :class="$style.container2">
+                    <div :class="$style.containerTitle">Account Information</div>
+                    <div :class="$style.container3">
+                        <div style="width:100%;  padding-top:60px; padding-bottom:60px;"
+                            :class="$style['account-item-container']">
+
+                            <div class="account-item">
+                                <div class="account-item-label">Account #</div>
+                                <div class="account-item-value"><b
+                                        style="font-size: 16pt;">{{activeModel['account_number'] }}</b></div>
+                            </div>
+
+
+                            <div class="account-item">
+                                <div class="account-item-label">Monthly Payment Amount</div>
+                                <div class="account-item-value">{{activeModel['monthly_payment_amount'] }}</div>
+                            </div>
+                            <!-- <div class="account-item">
+                                <div class="account-item-label">Payment Terms</div>
+                                <div class="account-item-value">{{activeModel['number_of_payments'] }}</div>
+                            </div> -->
+                            <div class="account-item">
+                                <div class="account-item-label">Number of Payments</div>
+                                <div class="account-item-value">{{activeModel['number_of_payments'] }}</div>
+                            </div>
+                            <div class="account-item">
+                                <div class="account-item-label">Billing Method</div>
+                                <div class="account-item-value">{{activeModel['last_4_cc'] }}</div>
+                            </div>
+                            <div class="account-item">
+                                <div class="account-item-label">Creditor</div>
+                                <div class="account-item-value">{{activeModel['creditor'] }}</div>
+                            </div>
+                            <div class="account-item">
+                                <div class="account-item-label">Creditors Total Due</div>
+                                <div class="account-item-value">${{activeModel['creditors_total_due'] }}</div>
+                            </div>
+                            <div class="account-item" >
+                                <div class="account-item-label">Service Address</div>
+                                <div class="account-item-value">{{activeModel['service_address_street1']}}
+                                    {{activeModel['service_address_street2']}}<br>
+                                    {{activeModel['service_address_city']}} {{activeModel['service_address_state']}},
+                                    {{activeModel['service_address_zip']}}</div>
+                            </div>
+                            <div class="account-item">
+                                <div class="account-item-label">Date of Order</div>
+                                <div class="account-item-value">{{activeModel['date_of_order'] }}</div>
+                            </div>
+                            <div class="account-item">
+                                <div class="account-item-label">Reported to Credit Bureau</div>
+                                <div class="account-item-value">
+                                    {{humanize(activeModel['reported_to_credit_bureau'])  || 'No'}}</div>
+                            </div>
+
+                            <!-- <div class="account-item">
+                                <div class="account-item-label">Paid In Full</div>
+                                <div class="account-item-value">{{humanize(activeModel['paid_in_full']) || 'No'}}</div>
+                            </div> -->
+                            <div class="account-item">
+                                <div class="account-item-label">Products</div>
+                                <div class="account-item-value" style="display:flex; flex-direction: column;">
+                                    <div :class="$style.creditorContainer" style="margin-bottom:15px;">
+
+                                        <div v-if="!productEditing" :class="$style.creditorValue2">
+                                            <span :class="$style.productItem" @change="changeProp($event, 'product_1')"
+                                                v-if="activeModel['product_1'] != ''">{{`${activeModel['product_1']}`}}</span>
+                                            <span :class="$style.productItem" @change="changeProp($event, 'product_2')"
+                                                v-if="activeModel['product_2'] != ''">{{`${activeModel['product_2']}`}}</span>
+                                            <span :class="$style.productItem" @change="changeProp($event, 'product_3')"
+                                                v-if="activeModel['product_3'] != ''">{{`${activeModel['product_3']}`}}</span>
+                                            <span :class="$style.productItem" @change="changeProp($event, 'product_4')"
+                                                v-if="activeModel['product_4'] != ''">{{`${activeModel['product_4']}`}}</span>
+                                            <span :class="$style.productItem" @change="changeProp($event, 'product_5')"
+                                                v-if="activeModel['product_5'] != ''">{{`${activeModel['product_5']}`}}</span>
+                                            <span :class="$style.productItem" @change="changeProp($event, 'product_6')"
+                                                v-if="activeModel['product_6'] != ''">{{`${activeModel['product_6']}`}}</span>
+                                            <span :class="$style.productItem" @change="changeProp($event, 'product_7')"
+                                                v-if="activeModel['product_7'] != ''">{{`${activeModel['product_7']}`}}</span>
+                                            <span :class="$style.productItem" @change="changeProp($event, 'product_8')"
+                                                v-if="activeModel['product_8'] != ''">{{`${activeModel['product_8']}`}}</span>
+                                            <span :class="$style.productItem" @change="changeProp($event, 'product_9')"
+                                                v-if="activeModel['product_9'] != ''">{{`${activeModel['product_9']}`}}</span>
+                                            <span :class="$style.productItem" @change="changeProp($event, 'product_10')"
+                                                v-if="activeModel['product_10'] != ''">{{`${activeModel['product_10']}`}}</span>
+                                            <!-- <v-btn fab small :color="$vuetify.theme.lightGreen" dark @click="productEditing = true"><i
+                                                            class="fal fa-pencil"></i></v-btn> -->
+                                        </div>
+                                        <div v-if="productEditing" :class="$style.productFields">
+                                            <v-text-field label="Product 1" :color="$vuetify.theme.lightGreen"
+                                                :class="$style.productField" v-model="activeModel['product_1']">
+                                            </v-text-field>
+                                            <v-text-field label="Product 2" :color="$vuetify.theme.lightGreen"
+                                                :class="$style.productField" v-model="activeModel['product_2']">
+                                            </v-text-field>
+                                            <v-text-field label="Product 3" :color="$vuetify.theme.lightGreen"
+                                                :class="$style.productField" v-model="activeModel['product_3']">
+                                            </v-text-field>
+                                            <v-text-field label="Product 4" :color="$vuetify.theme.lightGreen"
+                                                :class="$style.productField" v-model="activeModel['product_4']">
+                                            </v-text-field>
+                                            <v-text-field label="Product 5" :color="$vuetify.theme.lightGreen"
+                                                :class="$style.productField" v-model="activeModel['product_5']">
+                                            </v-text-field>
+                                            <v-text-field label="Product 6" :color="$vuetify.theme.lightGreen"
+                                                :class="$style.productField" v-model="activeModel['product_6']">
+                                            </v-text-field>
+                                            <v-text-field label="Product 7" :color="$vuetify.theme.lightGreen"
+                                                :class="$style.productField" v-model="activeModel['product_7']">
+                                            </v-text-field>
+                                            <v-text-field label="Product 8" :color="$vuetify.theme.lightGreen"
+                                                :class="$style.productField" v-model="activeModel['product_8']">
+                                            </v-text-field>
+                                            <v-text-field label="Product 9" :color="$vuetify.theme.lightGreen"
+                                                :class="$style.productField" v-model="activeModel['product_9']">
+                                            </v-text-field>
+                                            <v-text-field label="Product 10" :color="$vuetify.theme.lightGreen"
+                                                :class="$style.productField" v-model="activeModel['product_10']">
+                                            </v-text-field>
+                                            <v-btn @click="productEditing = false" dark fab small
+                                                :color="$vuetify.theme.lightGreen"><i class="fal fa-check"></i></v-btn>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+                </div>
+                <div style="margin-bottom:50px; display:none">
+                    <div :class="$style.containerTitle">Payment Information</div>
+                    <div :class="$style.container">
+                        <div :class="$style.paymentContainer">
+                            <div :class="$style.paymentDisplayContainer">
+                                <div :class="$style.paymentDisplay">
+                                    <div :class="$style.paymentDisplayInner">
+                                        <div :class="$style.progressBox">
+                                            <div :style="'width:'+ ((activeModel['total_paid_to_date'] || 0) / activeModel['creditors_total_due']) * 100 + '%'"
+                                                class="progressBoxInner" :class="{'progressInit': barLoaded}"></div>
+                                        </div>
+                                        <label>Payments</label>
+                                        <label :class="$style.upperRight">Balance Due</label>
+
+                                        <div v-if="activeModel['total_paid_to_date'] != null">
+                                            ${{(activeModel['total_paid_to_date']).toFixed(2) }}</div>
+
+                                        <div v-else>$0 22</div>
+
+                                        <span>/ ${{Number(activeModel['creditors_total_due']).toFixed(2)}}
+                                            ({{ (((activeModel['total_paid_to_date'] || 0) / activeModel['creditors_total_due']).toFixed(2) * 100).toFixed(0) + '%'}})</span>
+
+                                        <div 
+                                            v-if="activeModel['total_paid_to_date'] != null && activeModel['creditors_total_due'] != null ">
+                                            ${{(activeModel['creditors_total_due'] - Number(activeModel['total_paid_to_date'])).toFixed(2) }}
+                                        </div>
+
+                                    </div>
+                                    <div v-if="activeModel['total_paid_to_date'] != null"
+                                        :class="$style.paymentDisplayBottom">
+                                        &nbsp;
+                                    </div>
+                                    <div :class="$style.paymentDisplayBottom" v-else>&nbsp;</div>
+                                </div>
+
+                            </div>
+                            <div :class="$style.transactionHistory">
+                                <div v-if="activeModel['cc_number'] != ''" :class="$style.creditCardContainer">
+                                    <i class="fal fa-credit-card"></i> Credit Card is on file. <v-btn
+                                        @click="toggleMakePayment" :color="'#47c3ad'" :class="$style.paymentBtn"
+                                        depressed dark small> Make Payment</v-btn>
+                                </div>
+                                <div v-if="activeModel['cc_number'] == ''"
+                                    :class="[$style.creditCardContainer, $style.danger]">
+                                    <i class="fal fa-exclamation-triangle"></i><i class="fal fa-credit-card"></i> No
+                                    Credit
+                                    Card on file. <v-btn @click="toggleMakePayment" :color="'#f1af1b'"
+                                        :class="$style.paymentBtn" depressed dark small> Make Payment</v-btn>
+                                </div>
+                                <div class="mpContainer" :class="{'active':makePayment}">
+                                    <div :class="$style.makePaymentContainer">
+                                        <div @click="makePaymentActiveTab = 0" class="paymentTypeTab"
+                                            :class="{'active':makePaymentActiveTab == 0}">Credit Card</div>
+                                        <div @click="makePaymentActiveTab = 2" class="paymentTypeTab"
+                                            :class="{'active':makePaymentActiveTab == 2}">Check</div>
+                                    </div>
+                                    <div :class="$style.paymentCenter" v-if="makePaymentActiveTab == 0">
+                                        <div style="display:flex;">
+                                            <v-text-field :disabled="paymentProcessing" v-model="charge.tracking_number"
+                                                style="max-width:150px; margin-right:10px;" label="Tracking Number"
+                                                :color="$vuetify.theme.lightGreen"></v-text-field>
+                                        </div>
+                                        <div style="display:flex;">
+                                            <v-text-field :disabled="paymentProcessing" v-model="charge.first_name"
+                                                style="max-width:150px; margin-right:10px;" label="First Name"
+                                                :color="$vuetify.theme.lightGreen"></v-text-field>
+                                            <v-text-field :disabled="paymentProcessing" v-model="charge.last_name"
+                                                style="max-width:150px;" label="Last Name"
+                                                :color="$vuetify.theme.lightGreen"></v-text-field>
+                                        </div>
+                                        <v-text-field :disabled="paymentProcessing" append-icon
+                                            v-model="charge.cc_number" mask="####-####-####-####"
+                                            style="max-width:250px;" label="Credit Card Number"
+                                            :color="$vuetify.theme.lightGreen">
+                                            <template v-slot:append><i class="fal fa-credit-card"></i></template>
+                                        </v-text-field>
+                                        <v-text-field :disabled="paymentProcessing" v-model="charge.cvv" mask="####"
+                                            style="max-width:100px;" label="cvv" :color="$vuetify.theme.lightGreen">
+                                        </v-text-field>
+                                        <v-text-field :disabled="paymentProcessing" v-model="charge.exp" mask="##/##"
+                                            style="max-width:100px;" label="Exp" :color="$vuetify.theme.lightGreen">
+                                        </v-text-field>
+                                        <v-text-field :disabled="paymentProcessing" prepend-inner-icon
+                                            v-model="charge.amount" label="Amount" style="max-width:100px;"
+                                            :color="$vuetify.theme.lightGreen">
+                                            <template v-slot:prepend-inner><i style="margin-top:3px;"
+                                                    class="fal fa-dollar-sign"></i></template>
+                                        </v-text-field>
+
+
+
+                                        <div>Billing Address</div>
+                                        <v-checkbox :color="$vuetify.theme.lightGreen" v-model="billing_same_as_address"
+                                            label="Billing same as Address"></v-checkbox>
+                                        <div style="display:flex; flex-direction: column; max-width: 300px;">
+                                            <v-text-field :disabled="paymentProcessing" label="street 1"
+                                                :class="$style.billingText" v-model="charge.billing_address_street1"
+                                                :color="$vuetify.theme.lightGreen"></v-text-field>
+                                            <v-text-field :disabled="paymentProcessing" :class="$style.billingText"
+                                                label="street 2" v-model="charge.billing_address_street2"
+                                                :color="$vuetify.theme.lightGreen"></v-text-field>
+                                            <v-text-field :disabled="paymentProcessing" :class="$style.billingText"
+                                                label="city" v-model="charge.billing_address_city"
+                                                :color="$vuetify.theme.lightGreen"></v-text-field>
+                                            <v-select :disabled="paymentProcessing" :class="$style.billingText"
+                                                label="state" v-model="charge.billing_address_state"
+                                                :items="Object.keys(states)" :color="$vuetify.theme.lightGreen">
+                                            </v-select>
+                                            <v-text-field :disabled="paymentProcessing" :class="$style.billingText"
+                                                label="zip" v-model="charge.billing_address_zip"
+                                                :color="$vuetify.theme.lightGreen"></v-text-field>
+                                        </div>
+
+                                        <v-checkbox :disabled="paymentProcessing" v-model="isRecurring"
+                                            label="Charge at Later Date"></v-checkbox>
+                                        <div style="display:flex;" v-if="isRecurring">
+                                            <v-menu :color="$vuetify.theme.lightGreen" v-model="pickerOpen"
+                                                :close-on-content-click="false" :nudge-right="40" lazy
+                                                transition="scale-transition" offset-y full-width min-width="290px">
+                                                <template v-slot:activator="{ on }">
+                                                    <v-text-field :color="$vuetify.theme.lightGreen"
+                                                        :disabled="paymentProcessing" v-model="charge.payment_date"
+                                                        label="Charge date" style="max-width:200px;"
+                                                        prepend-icon="event" :readonly="!isAdmin" v-on="on">
+                                                    </v-text-field>
+                                                </template>
+                                                <v-date-picker :color="$vuetify.theme.lightGreen"
+                                                    v-model="charge.payment_date" light @input="pickerOpen = false">
+                                                </v-date-picker>
+                                            </v-menu>
+                                        </div>
+
+                                        <v-btn :depressed="paymentProcessing" @click="submitCreditCardPayment"
+                                            :color="$vuetify.theme.lightGreen" dark style="margin:0;"><span
+                                                style="width:150px; text-align:center;"
+                                                v-if="!paymentProcessing">Process
+                                                Payment</span><span style="width:150px; text-align:center;"
+                                                v-if="paymentProcessing"><img style="height:25px;"
+                                                    src="../../../../img/spinner_white.svg" alt=""></span></v-btn>
+                                        <div :class="$style.paymentError" v-if="paymentError">{{paymentErrorMessage}}
+                                        </div>
+                                        <div :class="$style.paymentSuccess" v-if="paymentSuccess"><i
+                                                class="fal fa-check"></i> The payment has been accepted.</div>
+                                    </div>
+                                    <div :class="$style.paymentCenter" v-if="makePaymentActiveTab == 1">
+                                        <div style="display:flex;">
+                                            <v-text-field :disabled="paymentProcessing" v-model="charge.tracking_number"
+                                                style="max-width:150px; margin-right:10px;" label="Tracking Number"
+                                                :color="$vuetify.theme.lightGreen"></v-text-field>
+                                        </div>
+                                        <div style="display:flex;">
+                                            <v-text-field :disabled="paymentProcessing" v-model="charge.account_holder"
+                                                style="max-width:250px; margin-right:10px;" label="Accountholder"
+                                                :color="$vuetify.theme.lightGreen"></v-text-field>
+
+                                        </div>
+                                        <v-select :color="$vuetify.theme.lightGreen" label="Account Type"
+                                            :disabled="paymentProcessing" v-model="charge.account_type"
+                                            style="max-width:150px;" :items="['Checking', 'Savings']"></v-select>
+                                        <v-text-field :disabled="paymentProcessing" v-model="charge.routing_number"
+                                            style="max-width:200px;" mask="###############" label="Routing Number"
+                                            :color="$vuetify.theme.lightGreen"></v-text-field>
+                                        <v-text-field :disabled="paymentProcessing" v-model="charge.bank_account_number"
+                                            mask="###############" style="max-width:200px;" label="Account Number"
+                                            :color="$vuetify.theme.lightGreen"></v-text-field>
+                                        <v-text-field :disabled="paymentProcessing" prepend-inner-icon
+                                            v-model="charge.amount" label="Amount" style="max-width:100px;"
+                                            :color="$vuetify.theme.lightGreen">
+                                            <template v-slot:prepend-inner><i style="margin-top:3px;"
+                                                    class="fal fa-dollar-sign"></i></template>
+                                        </v-text-field>
+                                        <v-checkbox :disabled="paymentProcessing" v-model="updateCreditCard"
+                                            label="Update bank info"></v-checkbox>
+                                        <v-checkbox :disabled="paymentProcessing" v-model="isRecurring"
+                                            label="Charge At Later Date"></v-checkbox>
+                                        <div style="display:flex;" v-if="isRecurring">
+                                            <v-menu :color="$vuetify.theme.lightGreen" v-model="pickerOpen"
+                                                :close-on-content-click="false" :nudge-right="40" lazy
+                                                transition="scale-transition" offset-y full-width min-width="290px">
+                                                <template v-slot:activator="{ on }">
+                                                    <v-text-field :color="$vuetify.theme.lightGreen"
+                                                        :disabled="paymentProcessing" v-model="charge.start_date"
+                                                        label="Payment Start Date" style="max-width:200px;"
+                                                        prepend-icon="event" :readonly="!isAdmin" v-on="on">
+                                                    </v-text-field>
+                                                </template>
+                                                <v-date-picker :color="$vuetify.theme.lightGreen"
+                                                    v-model="charge.start_date" light @input="pickerOpen = false">
+                                                </v-date-picker>
+                                            </v-menu>
+
+                                        </div>
+                                        <div>Billing Address</div>
+                                        <div style="display:flex; flex-direction: column; max-width: 300px;">
+                                            <v-text-field label="street 1" :class="$style.billingText"
+                                                v-model="charge.billing_address_street1"
+                                                :color="$vuetify.theme.lightGreen"></v-text-field>
+                                            <v-text-field :class="$style.billingText" label="street 2"
+                                                v-model="charge.billing_address_street2"
+                                                :color="$vuetify.theme.lightGreen"></v-text-field>
+                                            <v-text-field :class="$style.billingText" label="city"
+                                                v-model="charge.billing_address_city"
+                                                :color="$vuetify.theme.lightGreen"></v-text-field>
+                                            <v-select :class="$style.billingText" label="state"
+                                                v-model="charge.billing_address_state" :items="Object.keys(states)"
+                                                :color="$vuetify.theme.lightGreen">
+                                            </v-select>
+                                            <v-text-field :class="$style.billingText" label="zip"
+                                                v-model="charge.billing_address_zip" :color="$vuetify.theme.lightGreen">
+                                            </v-text-field>
+                                        </div>
+                                        <v-btn :depressed="paymentProcessing" @click="submitCreditCardPayment"
+                                            :color="$vuetify.theme.lightGreen" dark style="margin:0;"><span
+                                                style="width:150px; text-align:center;"
+                                                v-if="!paymentProcessing">Process
+                                                Payment</span><span style="width:150px; text-align:center;"
+                                                v-if="paymentProcessing"><img style="height:25px;"
+                                                    src="../../../../img/spinner_white.svg" alt=""></span></v-btn>
+                                        <div :class="$style.paymentError" v-if="paymentError">{{paymentErrorMessage}}
+                                        </div>
+                                        <div :class="$style.paymentSuccess" v-if="paymentSuccess"><i
+                                                class="fal fa-check"></i> The payment has been accepted.</div>
+                                    </div>
+                                    <div :class="$style.paymentCenter" v-if="makePaymentActiveTab == 2">
+                                        <div style="display:flex;">
+                                            <v-text-field :disabled="paymentProcessing" v-model="charge.tracking_number"
+                                                style="max-width:150px; margin-right:10px;" label="Tracking Number"
+                                                :color="$vuetify.theme.lightGreen"></v-text-field>
+                                        </div>
+                                        <div style="display:flex;">
+                                            <v-text-field :disabled="paymentProcessing" v-model="charge.account_holder"
+                                                style="max-width:250px; margin-right:10px;" label="Accountholder"
+                                                :color="$vuetify.theme.lightGreen"></v-text-field>
+
+                                        </div>
+
+                                        <v-text-field :disabled="paymentProcessing" v-model="charge.check_number"
+                                            style="max-width:200px;" mask="###############" label="Check Number"
+                                            :color="$vuetify.theme.lightGreen"></v-text-field>
+                                        <v-text-field :disabled="paymentProcessing" v-model="charge.bank_name"
+                                            style="max-width:200px;" label="Bank Name"
+                                            :color="$vuetify.theme.lightGreen"></v-text-field>
+                                        <v-text-field :disabled="paymentProcessing" v-model="charge.bank_account_number"
+                                            mask="###############" style="max-width:200px;" label="Account Number"
+                                            :color="$vuetify.theme.lightGreen"></v-text-field>
+                                        <v-text-field :disabled="paymentProcessing" v-model="charge.routing_number"
+                                            mask="###############" style="max-width:200px;" label="Routing Number"
+                                            :color="$vuetify.theme.lightGreen"></v-text-field>
+                                        <v-text-field :disabled="paymentProcessing" prepend-inner-icon
+                                            v-model="charge.amount" label="Amount" style="max-width:100px;"
+                                            :color="$vuetify.theme.lightGreen">
+                                            <template v-slot:prepend-inner><i style="margin-top:3px;"
+                                                    class="fal fa-dollar-sign"></i></template>
+                                        </v-text-field>
+
+                                        <div style="display:flex;" v-if="isRecurring">
+                                            <v-menu :color="$vuetify.theme.lightGreen" v-model="pickerOpen"
+                                                :close-on-content-click="false" :nudge-right="40" lazy
+                                                transition="scale-transition" offset-y full-width min-width="290px">
+                                                <template v-slot:activator="{ on }">
+                                                    <v-text-field :color="$vuetify.theme.lightGreen"
+                                                        :disabled="paymentProcessing" v-model="charge.start_date"
+                                                        label="Payment Start Date" style="max-width:200px;"
+                                                        prepend-icon="event" :readonly="!isAdmin" v-on="on">
+                                                    </v-text-field>
+                                                </template>
+                                                <v-date-picker :color="$vuetify.theme.lightGreen"
+                                                    v-model="charge.start_date" light @input="pickerOpen = false">
+                                                </v-date-picker>
+                                            </v-menu>
+                                            <v-text-field :disabled="paymentProcessing" label="# of Payments"
+                                                v-model="charge.number_of_payments" mask="##"
+                                                :color="$vuetify.theme.lightGreen"
+                                                style="max-width:150px; margin-left:15px;"></v-text-field>
+                                        </div>
+                                        <v-btn :depressed="paymentProcessing" @click="submitCheckPayment"
+                                            :color="$vuetify.theme.lightGreen" dark style="margin:0;"><span
+                                                style="width:150px; text-align:center;"
+                                                v-if="!paymentProcessing">Process
+                                                Payment</span><span style="width:150px; text-align:center;"
+                                                v-if="paymentProcessing"><img style="height:25px;"
+                                                    src="../../../../img/spinner_white.svg" alt=""></span></v-btn>
+                                        <div :class="$style.paymentError" v-if="paymentError">{{paymentErrorMessage}}
+                                        </div>
+                                        <div :class="$style.paymentSuccess" v-if="paymentSuccess"><i
+                                                class="fal fa-check"></i> The payment has been accepted.</div>
+                                    </div>
+                                </div>
+                                <transition enter-active-class="fadeInUp" leave-active-class="fadeOut">
+                                    <div v-if="transactionsLoading"
+                                        style="display:flex; align-items: center; justify-content: center; height:300px; background:#fff;"
+                                        class=" animated-fast"><img style="width:30px;" src="@/img/double_loader.svg"
+                                            alt=""></div>
+                                </transition>
+                                <div v-if="isLoaded && transactions.length > 0 && !transactionsLoading"
+                                    style="margin-top:15px; font-size:15pt; font-weight:bold;">Payment History
+                                </div>
+                                <v-tabs v-model="paymentTabs">
+                                    <v-tab :ripple="false">Current</v-tab>
+                                    <v-tab :ripple="false">Legacy</v-tab>
+                                </v-tabs>
+                                <v-tabs-items v-model="paymentTabs">
+
+
+                                    <v-tab-item :key="0">
+                                        <v-client-table
+                                            v-if="isLoaded && transactions.length > 0 && !transactionsLoading"
+                                            :data="transactions" :columns="columns"
+                                            :options="{pagination: { dropdown:true }}">
+                                            <div slot="h__type">Type</div>
+                                            <div slot="h__created_at"> Payment Date</div>
+
+                                            <div slot="h__user_name"> Agent</div>
+                                            <div slot="balance_after_payment" slot-scope="{row}">
+                                                ${{row.balance_after_payment}}
+                                            </div>
+                                            <div slot="payment_date" slot-scope="{row}">{{formatDate(row.payment_date)}}
+                                            </div>
+                                            <div slot="amount" style="max-width:100px;" slot-scope="{row}">
+                                                ${{row.amount}}</div>
+                                            <div slot="created_by_name" style="max-width:100px;" slot-scope="{row}">
+                                                {{row.created_by_name}}</div>
+                                        </v-client-table>
+                                        <div v-else :class="$style.noTrans">No Transaction History Available</div>
+                                    </v-tab-item>
+                                    <v-tab-item :key="1">
+                                        <div :class="$style.paymentNotes" v-html="model.payment_notes"></div>
+                                    </v-tab-item>
+                                </v-tabs-items>
+                                <div v-if="isLoaded && activeSubscriptions.length > 0 && !transactionsLoading"
+                                    style="margin-top:15px; font-size:15pt; font-weight:bold;">Subscriptions</div>
+                                <v-client-table
+                                    v-if="isLoaded && activeSubscriptions.length > 0 && !transactionsLoading"
+                                    :data="activeSubscriptions"
+                                    :columns="['subscription_id','amount','created_at','start_date','user_name', 'number_of_payments','number_of_payments_made', 'next_payment_due','active']"
+                                    :options="{}">
+                                    <div slot="h__type">Type</div>
+                                    <div slot="h__created_at">Subscription Created On</div>
+                                    <div slot="h__number_of_payments">Payments</div>
+                                    <div slot="h__number_of_payments_made">Payments Made</div>
+
+                                    <div slot="h__user_name">Agent</div>
+                                    <div slot="h__active">Status</div>
+
+                                    <div slot="payment_date" slot-scope="{row}">{{formatDate(row.payment_date)}}</div>
+                                    <div slot="next_payment_due" slot-scope="{row}">{{formatDate(row.next_payment_due)}}
+                                    </div>
+                                    <div slot="start_date" slot-scope="{row}">{{formatDate(row.start_date)}}</div>
+                                    <div slot="amount" style="max-width:100px;" slot-scope="{row}">${{row.amount}}</div>
+                                    <div slot="created_by_name" style="max-width:100px;" slot-scope="{row}">
+                                        {{row.created_by_name}}</div>
+                                    <div slot="active" style="max-width:100px; display:flex; align-items:center;"
+                                        slot-scope="{row}"><span class="subStatus"
+                                            :class="{'active':row.active}">{{row.active ? 'Active' : 'Inactive'}}&nbsp;&nbsp;
+                                            <v-btn @click="cancelSubscription(row.subscription_id, row._id)"
+                                                v-if="row.active" color="#f45555"
+                                                style="margin:0; font-size:12pt; height:30px; width:30px;" depressed fab
+                                                dark small><i class="fal fa-times-circle"></i></v-btn></span> </div>
+                                </v-client-table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <v-btn dark depressed small fab :color="$vuetify.theme.lightGreen" @click="noteActive = !noteActive"><i
+                        class="fal fa-sticky-note"></i></v-btn>
+                <v-expand-transition>
+                    <div style="background:rgb(235, 244, 245); border:solid 1px #eaeaea; border-radius: 3px;"
+                        v-if="noteActive">
+                        <div style="padding:15px;">
+                            <v-textarea auto-grow :color="$vuetify.theme.lightGreen" solo v-model="note" label="Note"
+                                placeholder="Note"></v-textarea>
+                            <v-btn :color="$vuetify.theme.lightGreen" dark @click="addNote"
+                                style="margin:0; margin-bottom:15px;" small><span style="text-transform: capitalize">Add
+                                    Note</span></v-btn>
+                        </div>
+                    </div>
+                </v-expand-transition>
+                <div v-if="addingNote"
+                    style="display:flex; align-items: center; justify-content: center; padding:55px; width:100%;">
+                    <img src="@/img/double_loader.svg" />
+                </div>
+                <div style="margin-bottom:100px;" v-if="!addingNote">
+                    <div v-for="(note, i) in orderedNotes" :key="i" :class="$style.noteContainer">
+                        <div :class="$style.noteUser">
+                            <div style="display:flex; align-items: center;">
+                                <i class="fal fa-user-circle"></i>&nbsp;{{note.user_name}}&nbsp;&nbsp;<span
+                                    style="color:#808080; font-size:.7em;">{{formatDate(note.created_at)}}</span>
+                            </div>
+                        </div>
+                        <div v-if="editNote != i" class="$style.noteBody">{{note.note}}</div>
+                        <v-textarea v-if="editNote == i" :color="$vuetify.theme.lightGreen" v-model="editedNoteBody">
+                        </v-textarea>
+                        <div v-if="isAdmin" style="margin-left:auto; display: flex;">
+                            <v-btn @click="toggleEditNote(i, note.note, note._id)" dark small depressed fab
+                                :color="$vuetify.theme.lightGreen"><i v-if="editNote == -1" class="fa fa-edit"></i> <i
+                                    v-else class="fa fa-save"></i></v-btn>
+                            <v-btn @click="deleteNote(note._id)" dark small depressed fab :color="'#aa3333'"><i
+                                    class="fa fa-times"></i> </v-btn>
+                        </div>
+
+                    </div>
+                </div> -->
+            </v-form>
+            <div style="display: none;">
+                <div class="title" style="margin-bottom:15px;">Activity</div>
+                <div style="margin-bottom:200px">
+                    <div v-for="(hist, i) in history" :key="i" :class="$style.historyContainer">
+                        <div v-if="hist.type == 'field'" :class="$style.historyItem">
+                            <div style="display:flex; align-items: center;">
+                                <i class="fal fa-user-circle"></i>&nbsp;<span
+                                    style="font-size:15pt; font-weight: bold;text-transform: capitalize;">{{hist.user_name}}</span>&nbsp;&nbsp;Changed&nbsp;&nbsp;
+                                <span
+                                    style="font-weight: bold;">{{humanize(hist.action.prop)}}</span>&nbsp;&nbsp;from&nbsp;&nbsp;<span
+                                    style="font-weight: bold;">{{humanize(hist.action.previous_value) || `~blank~`}}</span>&nbsp;&nbsp;
+                                to &nbsp;&nbsp; <span
+                                    style="font-weight: bold;">{{humanize(hist.action.new_value)}}</span>&nbsp;&nbsp; on
+                                &nbsp;&nbsp;<span style="color:#808080;">{{formatDate(hist.created_at)}}</span>
+                            </div>
+                        </div>
+
+                        <div v-if="hist.type == 'mailer'" :class="$style.historyItem">
+                            <div style="display:flex; align-items: center;">
+                                <i class="fal fa-user-circle"></i>&nbsp;<span
+                                    style="font-size:15pt; font-weight: bold; text-transform: capitalize;">{{hist.user_name}}</span>&nbsp;&nbsp;
+                                <span style="font-weight: bold;">{{hist.message}}</span>&nbsp;&nbsp; on
+                                &nbsp;&nbsp;<span style="color:#808080;">{{formatDate(hist.created_at)}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+   
+</div>

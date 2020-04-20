@@ -1,0 +1,166 @@
+.container{
+    display:flex;
+    align-items: flex-start;
+    padding:55px;
+    justify-content: center;
+    background: #d6d9db;
+}
+.page{
+    height:10.9in;
+    background:#ff9900;
+    position: relative;
+    width:8.4in;
+    padding:45px;
+    background:#fff;
+    margin-top:-1px;
+    
+}
+.pageNoBorder{
+    height:10.9in;
+    background:#ff9900;
+    position: relative;
+    width:8.4in;
+    padding:15px;
+    background:#fff;
+    margin-top:-1px;
+    
+}
+.pageInner{
+    height:calc(10.9in - 92px);
+    padding:15px;
+    border:solid .01in #000;
+    width:100%;
+}
+.pageInnerNoBorder{
+    height:calc(10.9in - 92px);
+    
+    
+    width:100%;
+}
+.title{
+    display:flex;
+    justify-content: center;
+    font-size: 12pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding:0px 0px;
+}
+.address p{
+    padding:0;
+    margin:0;
+    display: inline-block;
+}
+.address{
+    font-family: 'Times New Roman', Times, serif;
+    display:inline-block;
+    
+}
+.row{
+    padding:15px;
+    display:flex;
+    align-items: flex-start;
+    font-family: 'Courier New', Courier, monospace;
+    line-height: 12pt;
+}
+.row p{
+    
+}
+.input{
+    padding:0px 0px;
+    border:solid 1px transparent;
+    border-radius: 5px;
+    transition:all .3s ease;
+    width:150px;
+}
+.input:focus{
+    border:solid 1px rgb(179, 179, 179);
+}
+.row .creditBureau{
+    flex:1;
+    text-align: center;
+    font-size:8pt;
+    white-space: pre-line
+}
+.listItem{
+    font-size:8pt;
+    display: inline-flex;
+    align-items: flex-start;
+    position: relative;
+    padding:0px ;
+    margin-right:10px;
+    border-bottom:solid 1px #0a0a0a;
+    
+}
+.listItem span{
+    margin-left:auto;
+    font-size:8pt;
+    text-align:right;
+    white-space: nowrap;
+    padding-left:20px;
+}
+.listItem b{
+    white-space: nowrap;
+}
+.addressBlock{
+    
+    
+    border-radius: 6px;
+    font-size:10pt;
+    
+}
+.addressBlock li{
+    text-transform: uppercase !important;
+}
+.section{
+    background:#fff;
+    border:solid 1px #d0d0d0;
+    border-radius: 5px;
+    margin-top:10px;
+    padding:15px;
+}
+.productContainer{
+    display:flex;
+    flex-wrap:wrap;
+    margin-top:15px;
+}
+.productItem{
+    max-width:calc(50% - 5px);
+    flex-basis:50%;
+    font-size:8pt;
+    padding:5px 15px;
+    border-radius: 100px;
+    background:#e7ebec;
+    margin-top:5px;
+    margin-left:10px;
+    color:#000;
+    display: inline-flex;
+    align-items: flex-start;
+    position: relative;
+}
+.productItem:nth-child(odd){
+    margin-left:0px !important;
+}
+.productItem b{
+    white-space: nowrap;
+}
+.productItem span{
+
+    margin-left:auto;
+    font-size:8pt;
+    text-align:right;
+    white-space: nowrap;
+    padding-left:20px;
+}
+b, strong{
+    font-weight: bold !important;
+}
+.classForm{
+    display: inline-block;
+    width:500px;
+    font-family: 'Courier New', Courier, monospace;
+    padding:15px;
+}
+.row{
+    margin:0;
+    padding:0;
+}

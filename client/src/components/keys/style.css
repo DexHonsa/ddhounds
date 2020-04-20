@@ -1,0 +1,68 @@
+.container{
+    padding:55px;
+}
+.details{
+   
+}
+.name{
+    font-weight: bold;
+    font-size: 20pt;
+}
+.email{
+    color:#808080;
+    font-size: .7em;
+    font-weight: 300;
+    display: block;
+}
+.keyContainer{
+    margin-top:45px;
+    display:flex;
+    flex-wrap: wrap;
+    border:solid 1px #eaeaea;
+    border-bottom:none;
+}
+.keyItem{
+    flex:1;
+    flex-basis: 33.3333%;
+    border-right:solid 1px #eaeaea;
+    border-bottom:solid 1px #eaeaea;
+    padding:15px;
+}
+.histItem{
+    cursor: pointer;
+    padding:15px;
+    background:#e3e6e7;
+    border-radius: 5px;
+    margin-bottom:15px;
+    transition:all .3s ease;
+}
+.histItem:hover{
+    box-shadow: 1px 25px 20px -20px rgba(0,0,0,0.2);
+    transform:scale(1.02,1.02);
+    z-index: 100;
+}
+.histName{
+    font-size:15pt;
+    font-weight: bold;
+}
+.histDate{
+    font-size: .8em;
+    color:#808080;
+    font-weight: 300;
+}
+.histDetail{
+    font-size:12pt;
+}
+.roleTag{
+    margin-top:10px;
+    width:min-content;
+    background:#ff9900;
+    color:#fff;
+    height:25px;
+    padding:0px 20px;
+    border-radius: 50px;
+    font-size: 10pt;
+    display:inline-block;
+    display:flex;
+    align-items: center;
+}

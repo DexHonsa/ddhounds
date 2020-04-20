@@ -1,0 +1,377 @@
+/* @import url('https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700'); */
+@font-face {
+	font-family: 'gotham';
+	font-weight: 300;
+	src: url(../fonts/GothamRounded-Light.otf);
+  }
+  
+  @font-face {
+	font-family: 'gotham';
+	font-weight: 500;
+	src: url(../fonts/GothamRounded-Medium.otf);
+  }
+  
+  @font-face {
+	font-family: 'gotham';
+	font-weight: 600;
+	src: url(../fonts/GothamRounded-Bold.otf);
+  }
+
+html,body{
+	font-family: gotham !important;
+	margin:0;
+	/* font-weight: 500; */
+	padding:0;
+	background:#fff;
+}
+ul{
+	margin:0;
+	padding:0;
+}
+li{
+	list-style: none;
+}
+.top-nav-container{
+	background:#1b495d;
+	position: fixed;
+	top:0;
+	left: 0;
+	z-index: 3;
+	height:80px;
+	display: flex;
+	align-items: center;
+	width:100%;
+}
+.left-nav-container li{
+	color:#fff;
+	float: left;
+	padding:2px;
+	margin:0px 17px;
+	font-size: 10pt;
+}
+.left-nav-container li.active{
+	border-bottom:solid 2px #fff;
+}
+.left-nav-container li:hover{
+	cursor: pointer;
+}
+.right-nav-container{
+	margin-left: auto;
+	margin-right: 50px;
+}
+.right-nav-container li{
+	color:#90acb8;
+	float: left;
+	margin:0px 10px;
+	font-size: 12pt;
+	transition:all .3s ease;
+	position: relative;
+}
+.notification-number{
+	background:#d16a6a;
+	height:15px;
+	width:15px;
+	border-radius: 2px;
+	line-height: 15px;
+	text-align: center;
+	font-size: 7pt;
+	color:#fff;
+	position: absolute;
+	top:-5px;
+	left: 10px;
+}
+.right-nav-container li:hover{
+	color:#fff;
+	cursor: pointer;
+}
+.logo{
+	float: left;
+	color:#fff;
+	margin-left: 25px;
+	line-height: 80px;
+	font-size: 35pt;
+	font-weight: bold;
+	letter-spacing: -1px;
+	margin-right: 95px;
+}
+.secondary-top-nav-container{
+	background:#365a69;
+	height:60px;
+	position: fixed;
+	top:80px;
+	width:100%;
+	z-index: 1;
+	padding-left: 200px;
+	display: flex;
+	align-items: center;
+}
+.nav-container{
+	padding:0px 50px;
+}
+.left-side-nav{
+	width:200px;
+	background:#d4dbe3;
+	padding:25px;
+	z-index: 2;
+	position: fixed;
+	top:0;
+	padding-top:95px;
+	height:100vh;
+}
+.left-side-nav-list li{
+	color:#1b495d;
+	margin:10px 0px;
+	font-size: 10pt;
+	font-weight: 500;
+	float: left;
+   clear: left;
+	
+}
+.left-side-nav-list li:hover{
+	color:#34b2b8;
+	cursor: pointer;
+}
+.left-side-nav-list li.active{
+	color:#34b2b8;
+	border-bottom:solid 2px #34b2b8;
+}
+.left-side-nav-list li.divider{
+	border-bottom:solid 1px #ACACAC;
+	width:100%;
+}
+.filter-container li{
+	float:left;
+	margin:0px 25px;
+	font-size: 10pt;
+}
+.filter-header{
+	text-transform: uppercase;
+	color:#34b2b8;
+	font-size: 7pt;
+	letter-spacing: 2px;
+	font-weight: 500;
+}
+.filter-value{
+	color:#fff;
+	font-size: 10pt;
+	transition:all .3s ease;
+}
+.filter-value:hover{
+	cursor: pointer;
+	color:#34b2b8;
+}
+.graph-container{
+	
+	
+	
+	
+	padding-right:55px;
+	overflow: auto;
+	margin-bottom:55px;
+}
+.graph-row{
+	padding:25px;
+	width:50%;
+	float: left;
+}
+.main-content{
+	padding-left:200px;
+	padding-top:140px;
+	position: absolute;
+	top:0;
+	left: 0;
+	width:100%;
+	
+	height:1000px;
+}
+.h1-title{
+	color:#365a69;
+	font-weight: 700;
+	font-size: 12pt;
+	
+	float: left;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	position: absolute;
+}
+.graph-value{
+	font-size: 15pt;
+	line-height: 15pt;
+	color:#365a69;
+	float: right;
+	font-weight: bold;
+	text-align: right;
+	margin-bottom:15px;
+}
+.graph-value .fa-caret-up{
+	color:#35AA58;
+}
+.graph-value span{
+	font-size: 8pt;
+	display: inline-block;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	font-weight: 500;
+}
+.map-container{
+	padding:15px;
+	width:50%;
+	float: left;
+}
+.selector-tabs{
+	padding:15px 0px;
+}
+.selector-tab{
+	background:#eaeaea;
+	color:#1b495d;
+	display: inline-block;
+	padding:7px 15px;
+	border-radius: 3px;
+	font-size: 10pt;
+}
+.selector-tab:hover{
+	cursor: pointer;
+	background:#d0d0d0;
+}
+.selector-tab.active{
+	background:#1b495d !important;
+	color:#fff !important;
+}
+
+.graph-values{
+	margin-top:15px;
+	font-size: 8pt;
+	font-weight: 500
+}
+.graph-values.left{
+	float: left;
+	text-align: left;
+	width:50%;
+	padding-right:15px;
+}
+.graph-values.right{
+	float: right;
+	text-align: left;
+	width:50%;
+	padding-left: 15px;
+}
+.graph-values-item{
+	display: flex;
+	align-items: center;
+	padding:2px 0px;
+}
+.graph-value-value{
+	margin-left: auto;
+	text-align: right;
+}
+.pre-loader{
+	background:#fff;
+	position: fixed;
+	z-index: 1000;
+	top:0;
+	left:0;
+	width:100%;
+	height:100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.pre-loader i{
+	font-size: 30pt;
+	color:#1b495d
+}
+.pre-post-tabs{
+	width:100%;
+	padding:55px;
+}
+.pre-post-tab{
+	padding:7px 15px;
+	background:#eaeaea;
+	border-radius: 3px;
+	display: inline-block;
+	margin-right:15px;
+	transition:all .3s ease;
+	font-size: 10pt;
+	cursor: pointer;
+}
+.pre-post-tab:hover{
+	background:#34b2b8;
+	color:#fff;
+}
+.pre-post-tab.active{
+	background:#34b2b8 !important;
+	color:#fff  !important;
+	box-shadow: 0px 0px 0px 5px rgba(52,178,184,0.48)  !important;
+}
+.valuation-value{
+	overflow: auto;
+}
+.valuation-value.right{
+	display: flex;
+	align-items: center;
+	width:50%;
+	float: right;
+	flex-direction: row-reverse;
+}
+.valuation-value.left{
+	display: flex;
+	align-items: center;
+	width:50%;
+	float: left;
+}
+
+.valuation-title{
+	font-size: 15pt;
+	font-weight: 500;
+	color:#34b2b8;
+}
+.valuation-title span{
+	font-size: 10pt;
+	color:#1b495d
+}
+.recent-alerts-container{
+	margin-top:25px;
+	padding:15px 0px;
+}
+.recent-alert-item{
+	display: flex;
+	align-items: center;
+	border-bottom: solid 1px #eaeaea;
+}
+.recent-alert-icon i{
+	color:#34b2b8;
+	font-size: 15pt;
+	padding:15px;
+	margin-right: 15px;
+}
+.recent-alert-title{
+	font-size: 10pt;
+	color:#1b495d;
+}
+.recent-alert-title span.med{
+	color:#FFBE00;
+}
+.recent-alert-title span.high{
+	color:#C0413D;
+}
+.recent-alert-title span.low{
+	color:#3DA061;
+}
+.tab-values{
+	margin-top:35px;
+	display: flex;
+	align-items: center;
+}
+.tab-value{
+	flex:1;
+	border-left: solid 1px #eaeaea;padding-left: 15px;
+	font-size: 12pt;
+	font-weight: 500;
+	color:#34b2b8;
+}
+.tab-value span{
+	font-size: 10pt;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	color:#1b495d;
+}
