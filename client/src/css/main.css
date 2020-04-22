@@ -17,7 +17,20 @@
   font-weight: 600;
   src: url(../fonts/GothamRounded-Bold.otf);
 }
-
+:root {
+  --theme-dark-blue: #242730;
+  --theme-light-blue: #29323c;
+  --theme-light-blue-hover: rgb(58, 65, 76);
+  --theme-light-blue-hover-hover: rgb(106, 116, 133);
+  --theme-light-blue-hover-text: rgb(211, 216, 224);
+  --theme-label: rgb(106, 116, 133);
+  --theme-text: rgb(160, 167, 180);
+  --theme-light-green: #ffffff30;
+  --theme-blue-gradient: linear-gradient(90deg, #29323c, #242730);
+  --theme-lightGreen: #2d7cb7;
+  --theme-lightGreen-hover: #236da5;
+  --theme-lightGreen30: #1fbad610
+}
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px white inset;
 }

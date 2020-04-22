@@ -43,20 +43,27 @@
       </div>
     </transition>
     <div style="display:flex;align-items:center;">
-      <v-select
-        class="fieldSelect"
-        v-model="searchField"
-        style="max-width:200px; margin-right:10px;"
-        item-text="label"
-        item-value="value"
-        :items="searchColumns"
-      ></v-select>
-      <v-text-field v-model="term" @keyup.enter.native="goSearch" label="Search">
+      <v-text-field
+        v-model="term"
+        @keyup.enter.native="$router.push({ query: { page: 1 } }), goSearch()"
+        label="Search"
+      >
         <template v-slot:prepend-inner>
           <i class="fa fa-search"></i>
         </template>
       </v-text-field>
-      <v-menu
+      <div class="searchBarDropdown">
+        <v-menu v-model="menu" offset-y :nudge-top="0" :nudge-left="0">
+          <template v-slot:activator="{on}">
+            <div class="activator" @click="menu = true" v-on:on="{on}">{{selector}}</div>
+          </template>
+          <v-card width="150">
+            <div @click="selector = 'corporate'" class="list">Corporate</div>
+            <div @click="selector = 'personal'" class="list">Personal</div>
+          </v-card>
+        </v-menu>
+      </div>
+      <!-- <v-menu
         v-model="filterMenu"
         :close-on-content-click="false"
         :nudge-width="200"
@@ -105,8 +112,17 @@
               ></v-text-field>
             </div>
             <div style="display:flex;" v-if="activeDataType == 'string'">
-              <v-select v-model="filterOperator" label="Operator" :items="['contains', 'excludes']"></v-select>
-              <v-text-field style="margin-left:10px;" label="Value" v-model="filterValue"></v-text-field>
+              <div v-if="activeFilter.options">
+                <v-select label="select one" value="Select One" :items="activeFilter.options"></v-select>
+              </div>
+              <div v-else>
+                <v-select
+                  v-model="filterOperator"
+                  label="Operator"
+                  :items="['contains', 'excludes']"
+                ></v-select>
+                <v-text-field style="margin-left:10px;" label="Value" v-model="filterValue"></v-text-field>
+              </div>
             </div>
             <div style="display:flex;" v-if="activeDataType == 'bool'">
               <v-select v-model="filterOperator" label="Operator" :items="['equals']"></v-select>
@@ -156,81 +172,77 @@
             <v-btn color="primary" flat @click="submitFilter">Save</v-btn>
           </v-card-actions>
         </v-card>
-      </v-menu>
+      </v-menu>-->
     </div>
-    <div style="display:flex; align-items:center">Total Records: {{total}}</div>
-    <v-client-table
-      v-if="isLoaded"
-      :perPage="25"
-      :data="clients"
-      :columns="columnLabels"
-      :options="options"
-      @sorted="sortMe"
-    >
+    <transition enter-active-class="fadeInUp" leave-active-class="fadeOutDown">
       <div
-        slot="account_number"
-        style="max-width:100px;"
-        slot-scope="{row}"
-        v-html="searchField == 'account_number' ? highlightTerm(row.account_number): row.account_number"
-      >{{row.account_number}}</div>
-      <div
-        slot="phone"
-        slot-scope="{row}"
-        v-html="searchField == 'phone' ? highlightTerm(row.phone): row.phone"
-      ></div>
-      <div
-        slot="cellphone"
-        slot-scope="{row}"
-        v-html="searchField == 'phone' ? highlightTerm(row.cellphone) : row.cellphone"
-      ></div>
-
-      <div
-        slot="monthly_payment_amount"
-        style="text-transform:capitalize"
-        slot-scope="{row}"
-      >{{row.monthly_payment_amount}}</div>
-
-      <div
-        @click="$router.push('clients/' + row._id)"
-        style="display:flex; cursor:pointer; align-items:center;"
-        slot="name"
-        slot-scope="{row}"
+        v-if="isLoading"
+        class="animated-med"
+        style="position:absolute;display: flex; flex-direction: column; justify-content:center; align-items: center; width:100%; height:80%;"
       >
-        <i style="color:#1d4562" class="fa fa-user-circle"></i>
+        <lottie
+          :options="defaultOptions"
+          :height="200"
+          :width="500"
+          v-on:animCreated="handleAnimation"
+        />
+        <br />
+        <div
+          style="color:#ffffff30; font-size: 10pt; text-transform: uppercase; letter-spacing: 2px;"
+        >Loading...</div>
+      </div>
+    </transition>
+    <div v-if="!isLoading">
+      <div style="display:flex; align-items:center">Total Records: {{total}}</div>
+      <v-client-table
+        v-if="isLoaded"
+        :data="names"
+        :columns="['titles','name','heading_type']"
+        :options="options"
+        @sorted="sortMe"
+      >
+        <template slot="h__titles">Titles</template>
+        <div slot="titles" style="max-width:50px;" slot-scope="{row}">{{row.titles}}</div>
+        <div slot="name" style="max-width:100px; max-height:25px;" slot-scope="{row}">
+          <a style="white-space:nowrap" :href="row.link">{{row.name}}</a>
+        </div>
+        <div slot="heading_type" slot-scope="{row}">{{row.heading_type}}</div>
 
         <div
-          class="clickName"
-          style="margin-left:10px; text-transform:capitalize"
-          v-html="searchField == 'name' ? highlightTerm(row.first_name + ' ' + row.middle_name + ' '  + row.last_name) : row.first_name + ' ' + row.middle_name + ' '  + row.last_name "
-        ></div>
+          slot="monthly_payment_amount"
+          style="text-transform:capitalize"
+          slot-scope="{row}"
+        >{{row.monthly_payment_amount}}</div>
+      </v-client-table>
+      <div style="display:flex; align-items:center;">
+        <div v-if="page > 1" @click="previousPage" class="next-page">Previous Page</div>
+        <div>Page: {{page}}</div>
+        <div @click="nextPage" class="next-page">Next Page</div>
       </div>
-
-      <div style="display:flex; align-items:center;" slot="date_of_notice" slot-scope="{row}">
-        <div>{{formatDate(row.date_of_notice)}}</div>
-      </div>
-    </v-client-table>
-    <div style="display:flex; align-items:center;">
-      <div v-if="page > 1" @click="previousPage" class="next-page">Previous Page</div>
-      <div>Page: {{page}}</div>
-      <div @click="nextPage" class="next-page">Next Page</div>
     </div>
   </div>
 </template>
 <script>
 import axios from "axios";
 import moment from "moment";
+import Lottie from "vue-lottie";
+import animationData from "../login/data.json";
 export default {
   name: "collection",
   data() {
     return {
       moment,
-      clients: [],
+      names: [],
       total: 0,
-      isLoaded: false,
+      isLoading: false,
+      isLoaded: true,
       pickerOpen: false,
-      term: "",
+      activeFilterOption: "",
+      term: this.$route.query.term || "**",
       lastTerm: "",
       filterMenu: false,
+      menu: false,
+      selector: this.$route.query.selector || "corporate",
       activeDataType: "number",
       filterMin: 0,
       filterMax: 0,
@@ -243,17 +255,49 @@ export default {
       filterError: false,
       filterErrorMessage: "",
       searchField: "name",
-      columnSort: "first_name"
+      columnSort: "first_name",
+      activeFilter: null,
+      defaultOptions: { animationData, loop: true },
+      animationSpeed: 1
     };
   },
   mounted() {
-    this.getClients();
+    this.getNames();
     if (this.page == null) {
       this.$router.push({ query: { page: 1 } });
     }
   },
 
   methods: {
+    handleAnimation: function(anim) {
+      this.anim = anim;
+    },
+    getNames() {
+      this.isLoading = true;
+      let term = this.term.replace(/\*/gi, "%");
+      axios
+        .post("/api/db", {
+          query: term,
+          limit: 250,
+          page: this.page,
+          filters: [{ type: this.activeDataType }],
+          selector: this.selector
+        })
+        .then(
+          res => {
+            this.isLoading = false;
+            this.isLoaded = true;
+            this.total = res.data.total;
+            this.names = res.data.items;
+          },
+          err => {
+            this.isLoading = false;
+            this.isLoaded = true;
+            this.total = 0;
+            this.names = [];
+          }
+        );
+    },
     sortMe(eve) {
       if (this.filterSort == "asc") {
         this.filterSort = "dec";
@@ -352,6 +396,8 @@ export default {
       });
     },
     getDataType(filter, i) {
+      console.log(filter);
+      this.activeFilter = this.columns.filter(item => item.value == filter)[0];
       var arr = this.columns.filter((item, i) => {
         return item.value == filter;
       });
@@ -385,23 +431,25 @@ export default {
     },
     goSearch() {
       // this.isLoaded = false;
+
       this.lastTerm = this.term;
-      axios
-        .post("/api/clients/search", {
-          field: this.searchField,
-          term: this.term,
-          page: this.page,
-          sortName: this.columnSort,
-          sort: this.filterSort,
-          filters: this.filters,
-          creditor: this.$store.state.userStore.user.creditor,
-          type: "all"
-        })
-        .then(res => {
-          this.clients = res.data.items;
-          this.total = res.data.total;
-          this.isLoaded = true;
-        });
+      this.getNames();
+      // axios
+      //   .post("/api/clients/search", {
+      //     field: this.searchField,
+      //     term: this.term,
+      //     page: this.page,
+      //     sortName: this.columnSort,
+      //     sort: this.filterSort,
+      //     filters: this.filters,
+      //     creditor: this.$store.state.userStore.user.creditor,
+      //     type: "all"
+      //   })
+      //   .then(res => {
+      //     this.clients = res.data.items;
+      //     this.total = res.data.total;
+      //     this.isLoaded = true;
+      //   });
     },
     formatPhone(phoneNumberString) {
       if (phoneNumberString.length == 7) {
@@ -420,25 +468,10 @@ export default {
       } else {
         return moment(date2).format("MM/DD/YYYY");
       }
-    },
-    getClients() {
-      axios
-        .post("/api/clients/search", {
-          field: this.searchField,
-          term: "",
-          page: this.page,
-          sortName: "first_name",
-          sort: "asc",
-          filters: this.filters,
-          creditor: this.$store.state.userStore.user.creditor,
-          type: "all"
-        })
-        .then(res => {
-          this.clients = res.data.items;
-          this.total = res.data.total;
-          this.isLoaded = true;
-        });
     }
+  },
+  components: {
+    Lottie
   },
   computed: {
     searchColumns() {
@@ -472,27 +505,12 @@ export default {
 
     columns() {
       return [
-        { label: "Account Number", value: "account_number", type: "string" },
-        { label: "Date of Notice", value: "date_of_notice", type: "date" },
+        { label: "Titles", value: "titles", type: "number" },
         {
-          label: "Zip",
-          value: "zip",
+          label: "Header Type",
+          value: "header_type",
+          options: ["personal", "corporate"],
           type: "string"
-        },
-        {
-          label: "address",
-          value: "address",
-          type: "string"
-        },
-        {
-          label: "State",
-          value: "state",
-          type: "string"
-        },
-        {
-          label: "Reported To Credit Bureau",
-          value: "reported_to_credit_bureau",
-          type: "bool"
         }
       ];
     },
@@ -519,7 +537,7 @@ export default {
     },
     options() {
       return {
-        perPage: 25,
+        perPage: 250,
         sortIcon: {
           base: "fa",
           up: "fa-caret-down",
@@ -535,6 +553,43 @@ export default {
 };
 </script>
 <style>
+.searchBarDropdown {
+  max-width: 150px;
+  min-width: 150px;
+  height: 40px;
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+  background: #5050d1;
+  cursor: pointer;
+  color: #fff;
+  user-select: none;
+}
+
+.list {
+  padding: 15px;
+  cursor: pointer;
+}
+
+.activator {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: capitalize;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.activator:hover {
+  background: #5050d1;
+}
+tr td:nth-child(1) {
+  width: 80px;
+}
 .VueTables__sort-icon {
   margin-left: 10px;
 }

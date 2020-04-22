@@ -55,9 +55,9 @@ Vue.use(Vuetify, {
   // iconfont: 'mdi',
   // icons: {},
   theme: {
-    accent: '#47c3ad',
-    lightGreen: '#f6af02',
-    darkBlueGradient: 'linear-gradient(90deg, #1b366d, #26427d)',
+    accent: '#2d7cb7',
+    lightGreen: '#2d7cb7',
+    darkBlueGradient: 'linear-gradient(90deg, #1b366d, #2d7cb7)',
     darkBlue: '#26427d',
   },
 });

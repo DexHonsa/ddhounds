@@ -21,29 +21,29 @@ export default {
     ...mapActions(["setToken", "setUser"])
   },
   created() {
-    const token = localStorage.getItem("token");
-    if (token) {
-      this.setToken(token);
-    } else {
-      if (this.$route.path.indexOf("reset") > -1) {
-      } else {
-        this.$router.push("/");
-      }
-    }
+    // const token = localStorage.getItem("token");
+    // if (token) {
+    //   this.setToken(token);
+    // } else {
+    //   if (this.$route.path.indexOf("reset") > -1) {
+    //   } else {
+    //     this.$router.push("/");
+    //   }
+    // }
   },
   mounted() {
-    const token = localStorage.getItem("token");
-    if (token) {
-      //
-    } else {
-      if (
-        this.$route.path.indexOf("reset") > -1 ||
-        this.$route.path.indexOf("new") > -1
-      ) {
-      } else {
-        this.$router.push("/");
-      }
-    }
+    // const token = localStorage.getItem("token");
+    // if (token) {
+    //   //
+    // } else {
+    //   if (
+    //     this.$route.path.indexOf("reset") > -1 ||
+    //     this.$route.path.indexOf("new") > -1
+    //   ) {
+    //   } else {
+    //     this.$router.push("/");
+    //   }
+    // }
   },
   computed: {
     path() {

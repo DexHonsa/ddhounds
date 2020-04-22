@@ -1,5 +1,7 @@
 import auth from '../../auth';
-
+import Toolbar from '../header';
+import Lottie from 'vue-lottie';
+import animationData from './data.json';
 export default {
     name: 'login',
     data() {
@@ -11,13 +13,34 @@ export default {
             isLoading: false,
             attempts: 0,
             timer: 10,
-            isTimedOut: false
+            isTimedOut: false,
+            loginOpen:false,
+            selector:'corporate',
+            menu:false,
+            isLoading:false,
+            defaultOptions: { animationData, loop: true },
+            animationSpeed: 1,
+            term:''
         }
     },
     mounted(){
-        this.init();
+        //this.init();
+    },
+    components:{
+      Toolbar,
+      Lottie
     },
     methods: {
+      search(){
+        this.isLoading = true;
+        setTimeout(()=>{
+          this.isLoading = false;
+          this.$router.push('/search?page=1&term=' + this.term + '&selector=' + this.selector);
+        },3000)
+      },
+      handleAnimation: function(anim) {
+        this.anim = anim;
+      },
         init() {
             var falling = true;
       

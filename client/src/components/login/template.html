@@ -1,25 +1,65 @@
 <div :class="$style.container">
     <div id="container"></div>
-    <div class="animated zoomIn" :class="$style.loginForm">
-    <div :class="$style.innerForm">
-        <div class="animated fadeInDown" :class="$style.loginLogo">
-                <img src="../../img/mini_logo.png" alt=""><br>
-            Seasons Portal
+    <Toolbar></Toolbar>
+    <v-dialog v-model="loginOpen" max-width="600">
+        <div class="animated zoomIn" :class="$style.loginForm">
+            <div :class="$style.innerForm">
+                <div class="animated fadeInDown" :class="$style.loginLogo">
+                        <img style="width:80%;" src="../../img/dd.svg" alt=""><br>
+                   
+                </div>
+                <div>
+                    <form @submit.prevent="login">
+                    <v-text-field class="animated fadeInLeft" v-model="email" background-color="transparent" :color="$vuetify.theme.lightGreen" label="Email"></v-text-field>
+                    <v-text-field class="animated fadeInRight" v-model="password" background-color="transparent" :color="$vuetify.theme.lightGreen" type="password" label="Password"></v-text-field>
+                    <v-btn :loading="isLoading" type="submit" :class="$style.loginBtn" dark :color="$vuetify.theme.lightGreen" depressed><span style="text-transform: none">Login</span></v-btn>
+                </form>
+                    <transition enter-active-class="shake" leave-active-class="fadeOut">
+                        <div :class="$style.errorMessage" class="animated" v-if="hasError">{{errorMessage}}</div>
+                    </transition>
+                </div>
+            </div>
+                <div style="width:100%; color:#fff; text-align:center; font-size:10pt;padding:15px; background:#2a5371">
+                        Forgot Password? <div @click="$router.push('/forgot')" :class="$style.link">Click here</div>
+                </div>
+            </div>
+      </v-dialog>
+
+      <div :class="$style.content">
+          <transition enter-active-class="fadeInUp" leave-active-class="fadeOutDown">
+            <div v-if="isLoading" class="animated-med" style="position:absolute;display: flex; flex-direction: column; align-items: center;">
+                <lottie :options="defaultOptions" :height="200" :width="500" v-on:animCreated="handleAnimation" /><br>
+                <div style="color:#ffffff30; font-size: 10pt; text-transform: uppercase; letter-spacing: 2px;">Loading...</div>
+            </div>
+          </transition>
+          <transition enter-active-class="fadeInUp" leave-active-class="fadeOutDown">
+              <div v-if="!isLoading" :class="'animated-med'">
+                  <div style="color:#fff; font-size:25pt; font-weight: 300; margin-bottom:15px;text-align: center;">Search over 8,000,000 names</div>
+          <div :class="[$style.searchBar, ]">
+            <div :class="$style.searchBarIcon"><i class="fal fa-search"></i></div>
+            <div :class="$style.searchBarInput"><input @keyup.enter="search" v-model="term" type="text"></div>
+            <div :class="$style.searchBarDropdown">
+                <v-menu v-model="menu" offset-y :nudge-top="0" :nudge-left="0">
+                    <template v-slot:activator="{on}">
+                        <div :class="$style.activator" @click="menu = true" v-on:on="{on}" >
+                            {{selector}}
+                        </div>
+                    </template>
+                    <v-card width="150">
+                        <div @click="selector = 'corporate'" :class="$style.list" >Corporate</div>
+                        <div @click="selector = 'personal'" :class="$style.list" >Personal</div>
+                        
+                    </v-card>
+                </v-menu>
+            </div>
+            <div @click="search" :class="$style.searchBarBtn"><i class="fal fa-arrow-right"></i></div>
+          </div>
+          <div style="color:#ffffff50; font-size:12pt; font-weight: 300; margin-top:15px;text-align: center;">Use * for Wildcard</div>
         </div>
-        <div>
-            <form @submit.prevent="login">
-            <v-text-field class="animated fadeInLeft" v-model="email" background-color="transparent" :color="$vuetify.theme.lightGreen" label="Email"></v-text-field>
-            <v-text-field class="animated fadeInRight" v-model="password" background-color="transparent" :color="$vuetify.theme.lightGreen" type="password" label="Password"></v-text-field>
-            <v-btn :loading="isLoading" type="submit" :class="$style.loginBtn" dark :color="$vuetify.theme.lightGreen" depressed><span style="text-transform: none">Login</span></v-btn>
-        </form>
-            <transition enter-active-class="shake" leave-active-class="fadeOut">
-                <div :class="$style.errorMessage" class="animated" v-if="hasError">{{errorMessage}}</div>
-            </transition>
-        </div>
-    </div>
-        <div style="width:100%; color:#fff; text-align:center; font-size:10pt;padding:15px; background:#2a5371">
-                Forgot Password? <div @click="$router.push('/forgot')" :class="$style.link">Click here</div>
-        </div>
-    </div>
+        </transition>
+      </div>
+
+
+    
     
 </div>

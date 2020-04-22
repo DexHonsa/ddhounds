@@ -1,7 +1,7 @@
 <template>
   <div class="header-container">
     <div class="header-logo">
-      <img style="width:45px;" src="../img/mini_logo_white.png" alt />
+      <img style="width:105px;" src="../img/dd_white.svg" alt />
     </div>
     <!-- <div class="header-search" :class="{'active':searchActive}">
       <i class="fal fa-search"></i>
@@ -14,6 +14,13 @@
       >
     </div>-->
     <div class="header-nav">
+      <ul>
+        <li @click="$router.push('/')" class="header-btn">
+          <i class="fal fa-home"></i>
+        </li>
+      </ul>
+    </div>
+    <div v-if="Object.keys(user).length > 0" class="header-nav">
       <ul>
         <li @click="$router.push('/dashboard')" class="header-btn">
           <i class="fal fa-home"></i>
@@ -53,7 +60,7 @@
               <div class="dropdown-chev"></div>
               <div class="user-info-container">
                 <div class="user-info-image">
-                  <img src="../img/mini_logo.png" style="width:100%;" alt="">
+                  <img src="../img/mini_logo.png" style="width:100%;" alt />
                 </div>
                 <div class="user-info-name">Welcome!</div>
               </div>
@@ -81,7 +88,7 @@ export default {
       userOpen: false,
       notifications: [],
       unreadNotifications: [],
-      mailers:[]
+      mailers: []
     };
   },
   mounted() {
@@ -216,7 +223,6 @@ export default {
   border-bottom: solid 1px #eaeaea;
 }
 .user-info-image {
-
   border-radius: 100px;
   height: 35px;
   width: 35px;
@@ -242,7 +248,7 @@ export default {
 .header-logo {
   display: flex;
   align-items: center;
-  padding:15px;
+  padding: 15px;
   height: 100%;
   width: 320px;
   color: #fff;
@@ -323,18 +329,18 @@ export default {
   border-right-color: transparent;
   right: 0;
 }
-.mailItem{
+.mailItem {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width:220px;
-  width:100%;
-  color:#1b495d;
-  border-left:solid 1px #1b495d99;
-  padding:4px;
+  max-width: 220px;
+  width: 100%;
+  color: #1b495d;
+  border-left: solid 1px #1b495d99;
+  padding: 4px;
   font-size: 10pt;
-  
-  margin:5px;
-  margin-left:15px;
+
+  margin: 5px;
+  margin-left: 15px;
 }
 </style>

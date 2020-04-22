@@ -1,37 +1,33 @@
 <template>
-
-  <v-navigation-drawer  style="top:70px;"  :mini-variant.sync="mini" absolute permanent
-           >
-          <div @mouseenter="mini = false" @mouseleave="mini=true" class="sidebar-container">
-    <!-- <div
+  <v-navigation-drawer style="top:70px;" :mini-variant.sync="mini" absolute permanent>
+    <div @mouseenter="mini = false" @mouseleave="mini=true" class="sidebar-container">
+      <!-- <div
       @click="goToRoute('/collection/master_search', 0)"
       class="sidebar-option"
       :class="{'active': open == 0 || path == '/collection/master_search'}"
     >
       Master Search
       <div class="active-bar" :class="{'active': path == '/collection/master_search'}"></div>
-    </div>-->
-    <div
+      </div>-->
+      <!-- <div
       @click.stop="goToRoute('/dashboard', 1)"
       class="sidebar-option"
       :class="{'active': open == 1 || path.indexOf('dashboard') > -1}"
     >
       <i class="fal fa-columns"></i> Dashboard
       <div class="active-bar" :class="{'active': path.indexOf('dashboard') > -1}"></div>
+      </div>-->
+      <div
+        @click.stop="goToRoute('/search?page=1', 2)"
+        class="sidebar-option"
+        :class="{'active' : path.indexOf('debtor') > -1}"
+      >
+        <i class="fal fa-search"></i>
+        Search
+        <div class="active-bar" :class="{'active': path.indexOf('debtor') > -1}"></div>
+      </div>
     </div>
-          <div
-            @click.stop="goToRoute('/collection/debtor?page=1', 2)"
-            class="sidebar-option"
-            :class="{'active' : path.indexOf('debtor') > -1}"
-          ><i class="fal fa-search"></i>
-            Debtor Search
-            <div class="active-bar" :class="{'active': path.indexOf('debtor') > -1}"></div>
-          </div>
-        </div>
-
-
   </v-navigation-drawer>
-
 </template>
 <script>
 export default {
@@ -39,14 +35,14 @@ export default {
   data() {
     return {
       open: 0,
-      mini:true,
-      drawer:true,
+      mini: true,
+      drawer: true
     };
   },
   mounted() {},
   methods: {
-    toggleMini(){
-      this.mini = true
+    toggleMini() {
+      this.mini = true;
     },
     goToRoute(route, index) {
       this.toggleOpen(index);
@@ -110,7 +106,7 @@ i.active {
 </style>
 <style>
 .sidebar-container {
-  width:100%;
+  width: 100%;
   background: #1d4562;
   height: 100%;
   min-width: 250px;
@@ -141,7 +137,7 @@ i.active {
   user-select: none;
   cursor: pointer;
   border-bottom: solid 1px #14364e;
-  box-shadow: 0px 1px 0px rgb(255, 255, 255,.1);
+  box-shadow: 0px 1px 0px rgb(255, 255, 255, 0.1);
   margin-bottom: 1px;
 }
 
@@ -155,10 +151,10 @@ i.active {
   color: #fff;
 }
 .sidebar-option i {
- margin-right:0px;
- margin-left:20px;
- width:50px;
- font-size: 15pt;
+  margin-right: 0px;
+  margin-left: 20px;
+  width: 50px;
+  font-size: 15pt;
 }
 .sidebar-sub-options {
   position: absolute;

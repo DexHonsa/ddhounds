@@ -14,7 +14,7 @@ import MasterSearch from '@/components/collection/master_search';
 import TransactionSearch from '@/components/collection/transactions_search';
 export default [
   {
-    path: "/collection/debtor",
+    path: "/search",
     components: {
         header:Header,
         sidebar:Sidebar,

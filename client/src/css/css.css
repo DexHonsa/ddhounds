@@ -43,6 +43,7 @@
     max-width: 1430px;
   }
 }
+
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px white inset;
 }
@@ -91,7 +92,7 @@ html,
 body {
   color: #f3fdff;
   font-family: "Montserrat" !important;
-  font-weight: 400;
+  font-weight: 200;
   margin: 0;
   padding: 0;
   background:#242427;
