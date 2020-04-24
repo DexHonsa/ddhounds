@@ -45,7 +45,7 @@
     <div style="display:flex;align-items:center;">
       <v-text-field
         v-model="term"
-        @keyup.enter.native="$router.push({ query: { page: 1 } }), goSearch()"
+        @keyup.enter.native="$router.push({ query: { page: 1,term:term, wildcards:wildcards, selector:selector } }), goSearch()"
         label="Search"
       >
         <template v-slot:prepend-inner>
@@ -60,6 +60,27 @@
           <v-card width="150">
             <div @click="selector = 'corporate'" class="list">Corporate</div>
             <div @click="selector = 'personal'" class="list">Personal</div>
+          </v-card>
+        </v-menu>
+      </div>
+      <div class="searchBarDropdown">
+        <v-menu v-model="menu2" offset-y :nudge-top="0" :nudge-left="0">
+          <template v-slot:activator="{on}">
+            <div
+              class="activator"
+              @click="menu2 = true"
+              v-on:on="{on}"
+            >{{wildcards ? 'Implied Wildcards':'No Wildcards'}}</div>
+          </template>
+          <v-card width="150">
+            <div
+              @click="$router.push({ query: { page: 1,term:term, wildcards:'true', selector:selector }})"
+              class="list"
+            >Implied Wildcards</div>
+            <div
+              @click="$router.push({ query: { page: 1,term:term, wildcards:'false', selector:selector }}) "
+              class="list"
+            >No Wildcards</div>
           </v-card>
         </v-menu>
       </div>
@@ -204,7 +225,7 @@
         <template slot="h__titles">Titles</template>
         <div slot="titles" style="max-width:50px;" slot-scope="{row}">{{row.titles}}</div>
         <div slot="name" style="max-width:100px; max-height:25px;" slot-scope="{row}">
-          <a style="white-space:nowrap" :href="row.link">{{row.name}}</a>
+          <a style="white-space:nowrap" :href="row.link" target="_blank">{{row.name}}</a>
         </div>
         <div slot="heading_type" slot-scope="{row}">{{row.heading_type}}</div>
 
@@ -242,6 +263,7 @@ export default {
       lastTerm: "",
       filterMenu: false,
       menu: false,
+      menu2: false,
       selector: this.$route.query.selector || "corporate",
       activeDataType: "number",
       filterMin: 0,
@@ -258,7 +280,7 @@ export default {
       columnSort: "first_name",
       activeFilter: null,
       defaultOptions: { animationData, loop: true },
-      animationSpeed: 1
+      animationSpeed: 1.3
     };
   },
   mounted() {
@@ -271,10 +293,14 @@ export default {
   methods: {
     handleAnimation: function(anim) {
       this.anim = anim;
+      this.anim.setSpeed(this.animationSpeed);
     },
     getNames() {
       this.isLoading = true;
       let term = this.term.replace(/\*/gi, "%");
+      if (this.wildcards) {
+        term = "%" + term + "%";
+      }
       axios
         .post("/api/db", {
           query: term,
@@ -419,14 +445,24 @@ export default {
       this.isLoaded = false;
       this.$router.push({
         query: {
-          page: Number(this.page) + 1
+          page: Number(this.page) + 1,
+          wildcards: this.wildcards,
+          selector: this.selector,
+          term: this.term
         }
       });
       this.goSearch();
     },
     previousPage() {
       this.isLoaded = false;
-      this.$router.push({ query: { page: Number(this.page) - 1 } });
+      this.$router.push({
+        query: {
+          page: Number(this.page) - 1,
+          wildcards: this.wildcards,
+          selector: this.selector,
+          term: this.term
+        }
+      });
       this.goSearch();
     },
     goSearch() {
@@ -474,6 +510,13 @@ export default {
     Lottie
   },
   computed: {
+    wildcards() {
+      if (this.$route.query.wildcards.toString() == "true") {
+        return true;
+      } else {
+        return false;
+      }
+    },
     searchColumns() {
       return [
         { label: "Account Number", value: "account_number" },
@@ -553,6 +596,9 @@ export default {
 };
 </script>
 <style>
+.table td {
+  padding: 3px 10px !important;
+}
 .searchBarDropdown {
   max-width: 150px;
   min-width: 150px;

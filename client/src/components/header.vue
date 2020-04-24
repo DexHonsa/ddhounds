@@ -1,7 +1,7 @@
 <template>
   <div class="header-container">
     <div class="header-logo">
-      <img style="width:105px;" src="../img/dd_white.svg" alt />
+      <img style="height:50px;" src="../img/dog_white.png" alt />
     </div>
     <!-- <div class="header-search" :class="{'active':searchActive}">
       <i class="fal fa-search"></i>

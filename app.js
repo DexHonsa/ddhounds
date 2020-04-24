@@ -4,19 +4,19 @@ var path = require('path');
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 var router = express.Router();
-var userRoutes = require("./routes/users");
-var authRoutes = require("./routes/auth");
-var clientRoutes = require("./routes/clients");
-var paymentRoutes = require('./routes/payment');
-var transactionRoutes = require('./routes/transactions');
-var dashboardRoutes = require('./routes/dashboard');
-var notificationRoutes = require('./routes/notifications');
-var subscriptionsRoutes = require('./routes/subscriptions');
-var mailRoutes = require('./routes/mail');
-var fileRoutes = require('./routes/file');
-var futureRoutes = require('./routes/future_que')
-var timesheetRoutes = require('./routes/timesheet')
-var metaRoutes = require('./routes/meta');
+// var userRoutes = require("./routes/users");
+// var authRoutes = require("./routes/auth");
+// var clientRoutes = require("./routes/clients");
+// var paymentRoutes = require('./routes/payment');
+// var transactionRoutes = require('./routes/transactions');
+// var dashboardRoutes = require('./routes/dashboard');
+// var notificationRoutes = require('./routes/notifications');
+// var subscriptionsRoutes = require('./routes/subscriptions');
+// var mailRoutes = require('./routes/mail');
+// var fileRoutes = require('./routes/file');
+// var futureRoutes = require('./routes/future_que')
+// var timesheetRoutes = require('./routes/timesheet')
+// var metaRoutes = require('./routes/meta');
 var morgan = require("morgan");
 var nodemailer = require('nodemailer');
 var config = require('./config.js');
@@ -56,22 +56,22 @@ app.use((req, res, next) => {
   }
   next();
 });
-app.use('/api/payment', paymentRoutes);
-app.use('/api/timesheet', timesheetRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/auth", authRoutes);
-app.use("/api/sms", smsRoutes);
-app.use("/api/clients", clientRoutes);
-app.use('/api/transactions', transactionRoutes);
-app.use('/api/subscriptions', subscriptionsRoutes);
-app.use('/api/files', fileRoutes);
-app.use('/api/dashboard', dashboardRoutes);
-app.use('/api/mail', mailRoutes);
-app.use('/api/meta', metaRoutes);
-app.use('/api/notifications', notificationRoutes);
-app.use('/api/future_que', futureRoutes);
+// app.use('/api/payment', paymentRoutes);
+// app.use('/api/timesheet', timesheetRoutes);
+// app.use("/api/users", userRoutes);
+// app.use("/api/auth", authRoutes);
+// app.use("/api/sms", smsRoutes);
+// app.use("/api/clients", clientRoutes);
+// app.use('/api/transactions', transactionRoutes);
+// app.use('/api/subscriptions', subscriptionsRoutes);
+// app.use('/api/files', fileRoutes);
+// app.use('/api/dashboard', dashboardRoutes);
+// app.use('/api/mail', mailRoutes);
+// app.use('/api/meta', metaRoutes);
+// app.use('/api/notifications', notificationRoutes);
+// app.use('/api/future_que', futureRoutes);
 
-app.use('/api/static', express.static(path.join(__dirname + '/uploads')));
+// app.use('/api/static', express.static(path.join(__dirname + '/uploads')));
 
 app.post('/api/db', (req,res)=>{
 	
@@ -111,10 +111,10 @@ app.post('/api/db', (req,res)=>{
 	  };
 	  console.log(filterss);
 
-	let offset = page * limit;
+	let offset = page - 1 * limit;
 	
 	let names = [];
-	console.log(selector);
+	
 	db.each(`SELECT * FROM Titles WHERE Headings LIKE '${query}' AND Heading_Type LIKE '%${selector}%' LIMIT ${offset}, ${limit} `, function(err, row) {
 		names.push({name:row.Headings, titles:row.Titles, link:row.Link, heading_type:row.Heading_Type});
 		
@@ -157,8 +157,8 @@ app.use((error, req, res, next) => {
 
 
 
-mongoose.connect(
-  "mongodb://dexhonsa:Awesomeo21!@hid-shard-00-00-6vaxg.mongodb.net:27017,hid-shard-00-01-6vaxg.mongodb.net:27017,hid-shard-00-02-6vaxg.mongodb.net:27017/test?ssl=true&replicaSet=HID-shard-0&authSource=admin&retryWrites=true"
-);
+// mongoose.connect(
+//   "mongodb://dexhonsa:Awesomeo21!@hid-shard-00-00-6vaxg.mongodb.net:27017,hid-shard-00-01-6vaxg.mongodb.net:27017,hid-shard-00-02-6vaxg.mongodb.net:27017/test?ssl=true&replicaSet=HID-shard-0&authSource=admin&retryWrites=true"
+// );
 
 module.exports = app;

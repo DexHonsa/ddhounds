@@ -17,10 +17,12 @@ export default {
             loginOpen:false,
             selector:'corporate',
             menu:false,
+            menu2:false,
             isLoading:false,
             defaultOptions: { animationData, loop: true },
-            animationSpeed: 1,
-            term:''
+            animationSpeed: 1.3,
+            term:'',
+            wildcards:'Implied Wildcards'
         }
     },
     mounted(){
@@ -35,11 +37,12 @@ export default {
         this.isLoading = true;
         setTimeout(()=>{
           this.isLoading = false;
-          this.$router.push('/search?page=1&term=' + this.term + '&selector=' + this.selector);
+          this.$router.push('/search?page=1&term=' + this.term + '&selector=' + this.selector + '&wildcards=' + (this.wildcards == 'Implied Wildcards'));
         },3000)
       },
       handleAnimation: function(anim) {
         this.anim = anim;
+        this.anim.setSpeed(this.animationSpeed);
       },
         init() {
             var falling = true;

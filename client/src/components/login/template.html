@@ -33,21 +33,37 @@
             </div>
           </transition>
           <transition enter-active-class="fadeInUp" leave-active-class="fadeOutDown">
-              <div v-if="!isLoading" :class="'animated-med'">
-                  <div style="color:#fff; font-size:25pt; font-weight: 300; margin-bottom:15px;text-align: center;">Search over 8,000,000 names</div>
+              <div v-if="!isLoading" style="margin-bottom:10%; text-align: center;" :class="'animated-med'">
+                  <img style="width:50%;" src="../../img/logo_dogs.png" alt="">
+                  <div style="color:#fff; font-size:20pt; max-width:800px; font-weight: 300; margin-bottom:15px;text-align: center;">Search over 8,000,000 names fetched from the U.S. Copyright Office</div>
           <div :class="[$style.searchBar, ]">
             <div :class="$style.searchBarIcon"><i class="fal fa-search"></i></div>
-            <div :class="$style.searchBarInput"><input @keyup.enter="search" v-model="term" type="text"></div>
+            <div :class="$style.searchBarInput"><input style="width:100%;" @keyup.enter="search" v-model="term" type="text"></div>
             <div :class="$style.searchBarDropdown">
                 <v-menu v-model="menu" offset-y :nudge-top="0" :nudge-left="0">
                     <template v-slot:activator="{on}">
                         <div :class="$style.activator" @click="menu = true" v-on:on="{on}" >
-                            {{selector}}
+                            {{selector}} <i style="margin-left:10px;" class="fa fa-caret-down"></i>
                         </div>
                     </template>
                     <v-card width="150">
                         <div @click="selector = 'corporate'" :class="$style.list" >Corporate</div>
                         <div @click="selector = 'personal'" :class="$style.list" >Personal</div>
+                        
+                    </v-card>
+                </v-menu>
+            </div>
+            <div :class="$style.searchBarDropdown">
+                <v-menu v-model="menu2" offset-y :nudge-top="0" :nudge-left="0">
+                    <template v-slot:activator="{on}">
+                        <div :class="$style.activator" @click="menu2 = true" v-on:on="{on}" >
+                            {{wildcards}} <i style="margin-left:10px;" class="fa fa-caret-down"></i>
+                        </div>
+                    </template>
+                    <v-card width="150">
+                        <div @click="wildcards = 'Implied Wildcards'" :class="$style.list" >Implied Wildcards</div>
+                        <div @click="wildcards = 'No Wildcards'" :class="$style.list" >No Wildcards</div>
+                        
                         
                     </v-card>
                 </v-menu>
