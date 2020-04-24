@@ -225,7 +225,7 @@
         <template slot="h__titles">Titles</template>
         <div slot="titles" style="max-width:50px;" slot-scope="{row}">{{row.titles}}</div>
         <div slot="name" style="max-width:100px; max-height:25px;" slot-scope="{row}">
-          <a style="white-space:nowrap" :href="row.link" target="_blank">{{row.name}}</a>
+          <a style="white-space:nowrap" :href="'https://cocatalog.loc.gov/cgi-bin/Pwebrecon.cgi?Search_Arg='+encodeURI(row.name)+'&Search_Code=NALL&PID=hBQj691uHaCn8-FBu6zG2Gzgt4&SEQ=20200424172040&CNT=25&HIST=1'" target="_blank">{{row.name}}</a>
         </div>
         <div slot="heading_type" slot-scope="{row}">{{row.heading_type}}</div>
 
