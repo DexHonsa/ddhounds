@@ -70,17 +70,17 @@
               class="activator"
               @click="menu2 = true"
               v-on:on="{on}"
-            >{{wildcards ? 'Implied Wildcards':'No Wildcards'}}</div>
+            >{{wildcards ? 'Auto Wildcards On':'Auto Wildcards Off'}}</div>
           </template>
           <v-card width="150">
             <div
               @click="$router.push({ query: { page: 1,term:term, wildcards:'true', selector:selector }})"
               class="list"
-            >Implied Wildcards</div>
+            >Auto Wildcards On</div>
             <div
               @click="$router.push({ query: { page: 1,term:term, wildcards:'false', selector:selector }}) "
               class="list"
-            >No Wildcards</div>
+            >Auto Wildcards Off</div>
           </v-card>
         </v-menu>
       </div>
@@ -214,7 +214,10 @@
       </div>
     </transition>
     <div v-if="!isLoading">
-      <div style="display:flex; align-items:center">Total Records: {{total}}</div>
+      <div style="display:flex; align-items:center">
+        Names Fetched:
+        <b style="margin-left:10px;">{{numberWithCommas(total)}}</b>
+      </div>
       <v-client-table
         v-if="isLoaded"
         :data="names"
@@ -225,7 +228,11 @@
         <template slot="h__titles">Titles</template>
         <div slot="titles" style="max-width:50px;" slot-scope="{row}">{{row.titles}}</div>
         <div slot="name" style="max-width:100px; max-height:25px;" slot-scope="{row}">
-          <a style="white-space:nowrap" :href="'https://cocatalog.loc.gov/cgi-bin/Pwebrecon.cgi?Search_Arg='+encodeURI(row.name)+'&Search_Code=NALL&PID=hBQj691uHaCn8-FBu6zG2Gzgt4&SEQ=20200424172040&CNT=25&HIST=1'" target="_blank">{{row.name}}</a>
+          <a
+            style="white-space:nowrap"
+            :href="'https://cocatalog.loc.gov/cgi-bin/Pwebrecon.cgi?Search_Arg='+encodeURI(row.name)+'&Search_Code=NALL&PID=hBQj691uHaCn8-FBu6zG2Gzgt4&SEQ=20200424172040&CNT=25&HIST=1'"
+            target="_blank"
+          >{{row.name}}</a>
         </div>
         <div slot="heading_type" slot-scope="{row}">{{row.heading_type}}</div>
 
@@ -289,8 +296,18 @@ export default {
       this.$router.push({ query: { page: 1 } });
     }
   },
-
+  watch: {
+    selector(val) {
+      this.getNames();
+    },
+    wildcards(val) {
+      this.getNames();
+    }
+  },
   methods: {
+    numberWithCommas(x) {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
     handleAnimation: function(anim) {
       this.anim = anim;
       this.anim.setSpeed(this.animationSpeed);
@@ -604,7 +621,6 @@ export default {
   min-width: 150px;
   height: 40px;
   display: flex;
-
   align-items: center;
   justify-content: center;
   margin-left: 10px;

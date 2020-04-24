@@ -22,7 +22,7 @@ export default {
             defaultOptions: { animationData, loop: true },
             animationSpeed: 1.3,
             term:'',
-            wildcards:'Implied Wildcards'
+            wildcards:'Auto Wildcards On'
         }
     },
     mounted(){
@@ -35,10 +35,10 @@ export default {
     methods: {
       search(){
         this.isLoading = true;
-        setTimeout(()=>{
+       // setTimeout(()=>{
           this.isLoading = false;
-          this.$router.push('/search?page=1&term=' + this.term + '&selector=' + this.selector + '&wildcards=' + (this.wildcards == 'Implied Wildcards'));
-        },3000)
+          this.$router.push('/search?page=1&term=' + this.term + '&selector=' + this.selector + '&wildcards=' + (this.wildcards == 'Auto Wildcards On'));
+       // },3000)
       },
       handleAnimation: function(anim) {
         this.anim = anim;

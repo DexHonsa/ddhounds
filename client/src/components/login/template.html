@@ -34,11 +34,11 @@
           </transition>
           <transition enter-active-class="fadeInUp" leave-active-class="fadeOutDown">
               <div v-if="!isLoading" style="margin-bottom:10%; text-align: center;" :class="'animated-med'">
-                  <img style="width:50%;" src="../../img/logo_dogs.png" alt="">
-                  <div style="color:#fff; font-size:20pt; max-width:800px; font-weight: 300; margin-bottom:15px;text-align: center;">Search over 8,000,000 names fetched from the U.S. Copyright Office</div>
+                  <img style="width:50%; margin-bottom:35px;" src="../../img/dd.svg" alt="">
+                  <div style="color:#fff; font-size:20pt; max-width:800px; font-weight: 300; margin-bottom:15px;text-align: center;">Search over 10,000,000 names fetched from the U.S. Copyright Office</div>
           <div :class="[$style.searchBar, ]">
             <div :class="$style.searchBarIcon"><i class="fal fa-search"></i></div>
-            <div :class="$style.searchBarInput"><input style="width:100%;" @keyup.enter="search" v-model="term" type="text"></div>
+            <div :class="$style.searchBarInput"><input placeholder="use * for wildcards" style="width:100%;" @keyup.enter="search" v-model="term" type="text"></div>
             <div :class="$style.searchBarDropdown">
                 <v-menu v-model="menu" offset-y :nudge-top="0" :nudge-left="0">
                     <template v-slot:activator="{on}">
@@ -61,8 +61,8 @@
                         </div>
                     </template>
                     <v-card width="150">
-                        <div @click="wildcards = 'Implied Wildcards'" :class="$style.list" >Implied Wildcards</div>
-                        <div @click="wildcards = 'No Wildcards'" :class="$style.list" >No Wildcards</div>
+                        <div @click="wildcards = 'Auto Wildcards On'" :class="$style.list" >Auto Wildcards On</div>
+                        <div @click="wildcards = 'Auto Wildcards Off'" :class="$style.list" >Auto Wildcards Off</div>
                         
                         
                     </v-card>
@@ -70,7 +70,7 @@
             </div>
             <div @click="search" :class="$style.searchBarBtn"><i class="fal fa-arrow-right"></i></div>
           </div>
-          <div style="color:#ffffff50; font-size:12pt; font-weight: 300; margin-top:15px;text-align: center;">Use * for Wildcard</div>
+          <div style="color:#ffffff; font-size:12pt; font-weight: 300; margin-top:15px;text-align: center;">Use * for Wildcard</div>
         </div>
         </transition>
       </div>
