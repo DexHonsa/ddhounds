@@ -1,90 +1,96 @@
 <template>
-  <div class="inner-stage">
-    <transition enter-active-class="fadeInUp" leave-active-class="fadeOut">
-      <div v-if="!isLoaded" class="loaderContainer animated-fast">
-        <div class="wrapper">
-          <div class="wrapper-cell">
-            <div class="image"></div>
-            <div class="text">
-              <div class="text-line"></div>
-              <div class="text-line"></div>
-              <div class="text-line"></div>
-              <div class="text-line"></div>
+  <div class="stage-container">
+    <div class="inner-stage">
+      <transition enter-active-class="fadeInUp" leave-active-class="fadeOut">
+        <div v-if="!isLoaded" class="loaderContainer animated-fast">
+          <div class="wrapper">
+            <div class="wrapper-cell">
+              <div class="image"></div>
+              <div class="text">
+                <div class="text-line"></div>
+                <div class="text-line"></div>
+                <div class="text-line"></div>
+                <div class="text-line"></div>
+              </div>
             </div>
-          </div>
-          <div class="wrapper-cell">
-            <div class="image"></div>
-            <div class="text">
-              <div class="text-line"></div>
-              <div class="text-line"></div>
-              <div class="text-line"></div>
-              <div class="text-line"></div>
+            <div class="wrapper-cell">
+              <div class="image"></div>
+              <div class="text">
+                <div class="text-line"></div>
+                <div class="text-line"></div>
+                <div class="text-line"></div>
+                <div class="text-line"></div>
+              </div>
             </div>
-          </div>
-          <div class="wrapper-cell">
-            <div class="image"></div>
-            <div class="text">
-              <div class="text-line"></div>
-              <div class="text-line"></div>
-              <div class="text-line"></div>
-              <div class="text-line"></div>
+            <div class="wrapper-cell">
+              <div class="image"></div>
+              <div class="text">
+                <div class="text-line"></div>
+                <div class="text-line"></div>
+                <div class="text-line"></div>
+                <div class="text-line"></div>
+              </div>
             </div>
-          </div>
-          <div class="wrapper-cell">
-            <div class="image"></div>
-            <div class="text">
-              <div class="text-line"></div>
-              <div class="text-line"></div>
-              <div class="text-line"></div>
-              <div class="text-line"></div>
+            <div class="wrapper-cell">
+              <div class="image"></div>
+              <div class="text">
+                <div class="text-line"></div>
+                <div class="text-line"></div>
+                <div class="text-line"></div>
+                <div class="text-line"></div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </transition>
-    <div style="display:flex;align-items:center;">
-      <v-text-field
-        v-model="term"
-        @keyup.enter.native="$router.push({ query: { page: 1,term:term, wildcards:wildcards, selector:selector } }), goSearch()"
-        label="Search"
-      >
-        <template v-slot:prepend-inner>
-          <i class="fa fa-search"></i>
-        </template>
-      </v-text-field>
-      <div class="searchBarDropdown">
-        <v-menu v-model="menu" offset-y :nudge-top="0" :nudge-left="0">
-          <template v-slot:activator="{on}">
-            <div class="activator" @click="menu = true" v-on:on="{on}">{{selector}}</div>
+      </transition>
+      <div style="display:flex;align-items:center;">
+        <v-text-field
+          v-model="term"
+          @keyup.enter.native="$router.push({ query: { page: 1,term:term, wildcards:wildcards, selector:selector } }), goSearch()"
+          label="Search"
+        >
+          <template v-slot:prepend-inner>
+            <i class="fa fa-search"></i>
           </template>
-          <v-card width="150">
-            <div @click="selector = 'corporate'" class="list">Corporate</div>
-            <div @click="selector = 'personal'" class="list">Personal</div>
-          </v-card>
-        </v-menu>
-      </div>
-      <div class="searchBarDropdown">
-        <v-menu v-model="menu2" offset-y :nudge-top="0" :nudge-left="0">
-          <template v-slot:activator="{on}">
-            <div
-              class="activator"
-              @click="menu2 = true"
-              v-on:on="{on}"
-            >{{wildcards ? 'Auto Wildcards On':'Auto Wildcards Off'}}</div>
-          </template>
-          <v-card width="150">
-            <div
-              @click="$router.push({ query: { page: 1,term:term, wildcards:'true', selector:selector }})"
-              class="list"
-            >Auto Wildcards On</div>
-            <div
-              @click="$router.push({ query: { page: 1,term:term, wildcards:'false', selector:selector }}) "
-              class="list"
-            >Auto Wildcards Off</div>
-          </v-card>
-        </v-menu>
-      </div>
-      <!-- <v-menu
+        </v-text-field>
+        <div class="searchBarDropdown">
+          <v-menu v-model="menu" offset-y :nudge-top="0" :nudge-left="0">
+            <template v-slot:activator="{on}">
+              <div class="activator" @click="menu = true" v-on:on="{on}">
+                {{selector}}
+                <i style="margin-left:10px;" class="fa fa-caret-down"></i>
+              </div>
+            </template>
+            <v-card width="150">
+              <div @click="selector = 'corporate'" class="list">Corporate</div>
+              <div @click="selector = 'personal'" class="list">Personal</div>
+            </v-card>
+          </v-menu>
+        </div>
+        <div class="searchBarDropdown">
+          <v-menu v-model="menu2" offset-y :nudge-top="0" :nudge-left="0">
+            <template v-slot:activator="{on}">
+              <div class="activator" @click="menu2 = true" v-on:on="{on}">
+                {{wildcards ? 'Auto Wildcards On':'Auto Wildcards Off'}}
+                <i
+                  style="margin-left:10px;"
+                  class="fa fa-caret-down"
+                ></i>
+              </div>
+            </template>
+            <v-card width="150">
+              <div
+                @click="$router.push({ query: { page: 1,term:term, wildcards:'true', selector:selector }})"
+                class="list"
+              >Auto Wildcards On</div>
+              <div
+                @click="$router.push({ query: { page: 1,term:term, wildcards:'false', selector:selector }}) "
+                class="list"
+              >Auto Wildcards Off</div>
+            </v-card>
+          </v-menu>
+        </div>
+        <!-- <v-menu
         v-model="filterMenu"
         :close-on-content-click="false"
         :nudge-width="200"
@@ -193,59 +199,60 @@
             <v-btn color="primary" flat @click="submitFilter">Save</v-btn>
           </v-card-actions>
         </v-card>
-      </v-menu>-->
-    </div>
-    <transition enter-active-class="fadeInUp" leave-active-class="fadeOutDown">
-      <div
-        v-if="isLoading"
-        class="animated-med"
-        style="position:absolute;display: flex; flex-direction: column; justify-content:center; align-items: center; width:100%; height:80%;"
-      >
-        <lottie
-          :options="defaultOptions"
-          :height="200"
-          :width="500"
-          v-on:animCreated="handleAnimation"
-        />
-        <br />
+        </v-menu>-->
+      </div>
+      <transition enter-active-class="fadeInUp" leave-active-class="fadeOutDown">
         <div
-          style="color:#ffffff30; font-size: 10pt; text-transform: uppercase; letter-spacing: 2px;"
-        >Loading...</div>
-      </div>
-    </transition>
-    <div v-if="!isLoading">
-      <div style="display:flex; align-items:center">
-        Names Fetched:
-        <b style="margin-left:10px;">{{numberWithCommas(total)}}</b>
-      </div>
-      <v-client-table
-        v-if="isLoaded"
-        :data="names"
-        :columns="['titles','name','heading_type']"
-        :options="options"
-        @sorted="sortMe"
-      >
-        <template slot="h__titles">Titles</template>
-        <div slot="titles" style="max-width:50px;" slot-scope="{row}">{{row.titles}}</div>
-        <div slot="name" style="max-width:100px; max-height:25px;" slot-scope="{row}">
-          <a
-            style="white-space:nowrap"
-            :href="'https://cocatalog.loc.gov/cgi-bin/Pwebrecon.cgi?Search_Arg='+encodeURI(row.name)+'&Search_Code=NALL&PID=hBQj691uHaCn8-FBu6zG2Gzgt4&SEQ=20200424172040&CNT=25&HIST=1'"
-            target="_blank"
-          >{{row.name}}</a>
+          v-if="isLoading"
+          class="animated-med"
+          style="position:absolute;display: flex; flex-direction: column; justify-content:center; align-items: center; width:100%; height:80%;"
+        >
+          <lottie
+            :options="defaultOptions"
+            :height="200"
+            :width="500"
+            v-on:animCreated="handleAnimation"
+          />
+          <br />
+          <div
+            style="color:#ffffff30; font-size: 10pt; text-transform: uppercase; letter-spacing: 2px;"
+          >Loading...</div>
         </div>
-        <div slot="heading_type" slot-scope="{row}">{{row.heading_type}}</div>
+      </transition>
+      <div v-if="!isLoading">
+        <div style="display:flex; align-items:center">
+          Names Fetched:
+          <b style="margin-left:10px;">{{numberWithCommas(total)}}</b>
+        </div>
+        <v-client-table
+          v-if="isLoaded"
+          :data="names"
+          :columns="['titles','name','heading_type']"
+          :options="options"
+          @sorted="sortMe"
+        >
+          <template slot="h__titles">Titles</template>
+          <div slot="titles" style="max-width:50px;" slot-scope="{row}">{{row.titles}}</div>
+          <div slot="name" style="max-width:100px; max-height:25px;" slot-scope="{row}">
+            <a
+              style="white-space:nowrap"
+              :href="'https://cocatalog.loc.gov/cgi-bin/Pwebrecon.cgi?Search_Arg='+encodeURI(row.name)+'&Search_Code=NALL&PID=hBQj691uHaCn8-FBu6zG2Gzgt4&SEQ=20200424172040&CNT=25&HIST=1'"
+              target="_blank"
+            >{{row.name}}</a>
+          </div>
+          <div slot="heading_type" slot-scope="{row}">{{row.heading_type}}</div>
 
-        <div
-          slot="monthly_payment_amount"
-          style="text-transform:capitalize"
-          slot-scope="{row}"
-        >{{row.monthly_payment_amount}}</div>
-      </v-client-table>
-      <div style="display:flex; align-items:center;">
-        <div v-if="page > 1" @click="previousPage" class="next-page">Previous Page</div>
-        <div>Page: {{page}}</div>
-        <div @click="nextPage" class="next-page">Next Page</div>
+          <div
+            slot="monthly_payment_amount"
+            style="text-transform:capitalize"
+            slot-scope="{row}"
+          >{{row.monthly_payment_amount}}</div>
+        </v-client-table>
+        <div style="display:flex; align-items:center;">
+          <div v-if="page > 1" @click="previousPage" class="next-page">Previous Page</div>
+          <div>Page: {{page}}</div>
+          <div @click="nextPage" class="next-page">Next Page</div>
+        </div>
       </div>
     </div>
   </div>
@@ -644,10 +651,11 @@ export default {
   text-transform: capitalize;
   transition: all 0.3s ease;
   user-select: none;
+  background: #2a5371;
 }
 
 .activator:hover {
-  background: #5050d1;
+  background: #2a5371;
 }
 tr td:nth-child(1) {
   width: 80px;

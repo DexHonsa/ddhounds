@@ -1,5 +1,11 @@
 <template>
-  <v-navigation-drawer style="top:70px;" :mini-variant.sync="mini" absolute permanent>
+  <v-navigation-drawer
+    v-show="false"
+    style="top:70px;"
+    :mini-variant.sync="mini"
+    absolute
+    permanent
+  >
     <div @mouseenter="mini = false" @mouseleave="mini=true" class="sidebar-container">
       <!-- <div
       @click="goToRoute('/collection/master_search', 0)"

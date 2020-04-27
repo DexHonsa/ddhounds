@@ -57,6 +57,7 @@ export default {
   position: relative;
   font-family: "Montserrat";
   overflow: hidden;
+  background: #fff;
 }
 .inner-section {
   margin-left: 80px;

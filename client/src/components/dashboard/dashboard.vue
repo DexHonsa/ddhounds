@@ -382,9 +382,16 @@ export default {
   width: 100%;
   margin-bottom: 25px;
 }
+.stage-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
 .inner-stage {
   padding: 45px;
-  width: calc(100% - 80px);
+  margin-left: -150px;
+  width: 100%;
+  max-width: 1500px;
   position: relative;
   background-color: #fff;
   color: #444;
