@@ -41,7 +41,7 @@
     "vue-select": "^2.4.0",
     "vue-socket.io": "^2.1.1-b",
     "vue-spinner": "^1.0.3",
-    "vue-tables-2": "^1.4.70",
+    "vue-tables-2": "^1.6.25",
     "vuejs-datepicker": "^0.9.26",
     "vuetify": "^1.5.14",
     "vuetify-google-autocomplete": "^2.0.0-beta.6",

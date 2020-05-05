@@ -18,6 +18,9 @@
         <li @click="$router.push('/')" class="header-btn">
           <i class="fal fa-home"></i>
         </li>
+        <li @click="$router.push('/table')" class="header-btn">
+          <i class="fal fa-table"></i>
+        </li>
       </ul>
     </div>
     <div v-if="Object.keys(user).length > 0" class="header-nav">

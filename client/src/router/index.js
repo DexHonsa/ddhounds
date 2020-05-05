@@ -21,6 +21,8 @@ import Notifications from '@/components/notifications';
 import Forgot from '@/components/forgot';
 import ResetPassword from '@/components/reset_password';
 import NewAccount from '@/components/new_account';
+import DDTable from '@/components/dd_table';
+import Table from '@/components/dd_table/table';
 
 //import { store } from "../store/store.js";
 
@@ -38,6 +40,24 @@ var baseRoutes = [
       header:Header,
       sidebar:Sidebar,
       inner: Timesheet,
+      footer: Footer
+    }
+  },
+  {
+    path: "/table",
+    components: {
+      header:Header,
+      sidebar:Sidebar,
+      inner: DDTable,
+      footer: Footer
+    }
+  },
+  {
+    path: "/table/table",
+    components: {
+      header:Header,
+      sidebar:Sidebar,
+      inner: Table,
       footer: Footer
     }
   },
