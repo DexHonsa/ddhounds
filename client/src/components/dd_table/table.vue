@@ -11,116 +11,129 @@
     <div class="table-container">
       <v-client-table :options="options" :data="tableData" :columns="columns">
         <div
-          
-          slot="guess_override"
-          slot-scope="props"
-        ><input type="text" v-model="tableData[props.index - 1].guess_override" class="override"></div>
+          slot="h__Parent Search or Matter Number for reference"
+          style="width:200px;white-space:pre-wrap; vertical-align:bottom"
+        >Parent Search or Matter Number for reference</div>
+        <div slot="Internal Comments" slot-scope="props">
+          <textarea
+            type="text"
+            v-model.lazy="tableData[tableData.findIndex((item)=>item.ID == props.row.ID)]['Internal Comments']"
+            class="override"
+          />
+        </div>
+        <div slot="Comments for Chain of Title" slot-scope="props">
+          <textarea
+            type="text"
+            v-model.lazy="tableData[tableData.findIndex((item)=>item.ID == props.row.ID)]['Comments for Chain of Title']"
+            class="override"
+          />
+        </div>
+
+        <!--<div slot="notes" slot-scope="props">
+          <input type="text" class="override" />
+        </div>-->
         <div
-          
-          slot="notes"
+          slot="Search Name"
+          style="white-space:nowrap"
           slot-scope="props"
-        ><input type="text" class="override"></div>
+        >{{props.row['Search Name']}}</div>
       </v-client-table>
     </div>
   </div>
 </template>
 <script>
+import axios from "axios";
 export default {
   name: "table",
   data() {
     return {
       isLoaded: false,
-
+      tableData: [],
+      columns: [],
       options: {
-        resizeableColumns:false,
+        perPage: 100,
+        pagination: { dropdown: true, show: true, nav: "fixed" },
+        resizeableColumns: true,
         cellClasses: {
-          guess_override: [
+          "Internal Comments": [
             {
               class: "guess",
-              condition: row => row.guess_override != ''
+              condition: row => row.guess_override != ""
             }
           ],
-          ddhounds_best_guess: [
+          "Comments for Chain of Title": [
             {
               class: "best_guess",
               condition: row => true
             }
           ]
-        },
-
-
+        }
       }
     };
   },
   mounted() {
-    this.isLoaded = true;
+    this.getData();
   },
-  computed: {
-    tableData() {
-      return [
-        {
-          search_name: "Marvel Entertainment",
-          usco_name: "Marvel Entertainment Group, Inc.​",
-          "recorded_document_#": "V3432D030​",
-          "entry_#": "#161",
-          linked_title_phase_2: "1994 Fleer Extra Bases ​",
-          ddhounds_best_guess: "VA0000683368",
-          guess_override: "VA0000683368",
-          ddhounds_notes: "",
-          notes: "I confirmed this is correct on Date​"
-        },
- 
-      ];
-    },
-    columns() {
-      return [
-        "search_name",
-        "usco_name",
-        "recorded_document_#",
-        "entry_#",
-        "linked_title_phase_2",
-        "ddhounds_best_guess",
-        "guess_override",
-        "ddhounds_notes",
-        "notes"
-      ];
+  computed: {},
+  methods: {
+    getData() {
+      this.isLoaded = false;
+      axios.get("/api/overrides").then(res => {
+        this.columns = ["ID", ...res.data.headers];
+        let reducer = (accumulator, currentValue, idx) => {
+          let obj = { ...accumulator };
+
+          obj[this.columns[idx + 1]] = currentValue;
+
+          return obj;
+        };
+        for (let i = 0; i < res.data.items.length; i++) {
+          res.data.items[i] = {
+            ID: i + 1,
+            ...res.data.items[i].reduce(reducer)
+          };
+        }
+        this.tableData = res.data.items;
+
+        this.isLoaded = true;
+      });
     }
   }
 };
 </script>
 <style>
-.override{
-    background:transparent;
-    outline:none;
-    font-weight: bold;
+.override {
+  background: transparent;
+  outline: none;
+  font-weight: bold;
 }
-.override:focus{
-    outline: none;
+.override:focus {
+  outline: none;
 }
 .container {
   padding: 55px;
 }
 .table-container {
-    width:100%;
+  width: 100%;
 
-  font-size: 13pt;
+  font-size: 11pt;
 }
 .table-container table thead tr th {
   white-space: nowrap;
 }
 .table-container table tbody td {
-  padding: 20px 20px !important;
+  padding: 0px 20px !important;
   position: relative;
 }
-.guess{
-    background:#e1f1e8 !important;
-    border:solid 1px #b6dbc6 !important;
-    color:teal
+.guess {
+  background: #e1f1e8 !important;
+  border: solid 1px #b6dbc6 !important;
+  color: teal;
 }
-.best_guess{
-    background:#e1e9f1 !important;
-    border:solid 1px #b6c5db !important;
-    color:rgb(0, 87, 128);
-    font-weight: bold;
+.best_guess {
+  background: #e1e9f1 !important;
+  border: solid 1px #b6c5db !important;
+  color: rgb(0, 87, 128);
+  font-weight: bold;
 }
 </style>

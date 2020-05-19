@@ -27,6 +27,7 @@ var CronJob = require('cron').CronJob;
 var MongoClient = require("mongodb").MongoClient;
 var ObjectId = require("mongodb").ObjectId;
 var axios = require('axios');
+var xlsx = require('node-xlsx').default;
 
 var sqlite3 = require('sqlite3').verbose();
 
@@ -72,6 +73,11 @@ app.use((req, res, next) => {
 // app.use('/api/future_que', futureRoutes);
 
 // app.use('/api/static', express.static(path.join(__dirname + '/uploads')));
+app.get('/api/overrides', (req, res)=>{
+	const workSheetsFromFile = xlsx.parse(`${__dirname}/overrides.xlsx`);
+	const items = workSheetsFromFile[0].data.slice(9, workSheetsFromFile[0].data.length);
+	res.send({headers:workSheetsFromFile[0].data[8],items});
+})
 
 app.post('/api/db', (req,res)=>{
 	
