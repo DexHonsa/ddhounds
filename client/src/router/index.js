@@ -23,6 +23,7 @@ import ResetPassword from '@/components/reset_password';
 import NewAccount from '@/components/new_account';
 import DDTable from '@/components/dd_table';
 import Table from '@/components/dd_table/table';
+import Table2 from '@/components/dd_table2/table';
 
 //import { store } from "../store/store.js";
 
@@ -49,6 +50,15 @@ var baseRoutes = [
       header:Header,
       sidebar:Sidebar,
       inner: DDTable,
+      footer: Footer
+    }
+  },
+  {
+    path: "/table2",
+    components: {
+      header:Header,
+      sidebar:Sidebar,
+      inner: Table2,
       footer: Footer
     }
   },

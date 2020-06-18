@@ -57,26 +57,17 @@ app.use((req, res, next) => {
   }
   next();
 });
-// app.use('/api/payment', paymentRoutes);
-// app.use('/api/timesheet', timesheetRoutes);
-// app.use("/api/users", userRoutes);
-// app.use("/api/auth", authRoutes);
-// app.use("/api/sms", smsRoutes);
-// app.use("/api/clients", clientRoutes);
-// app.use('/api/transactions', transactionRoutes);
-// app.use('/api/subscriptions', subscriptionsRoutes);
-// app.use('/api/files', fileRoutes);
-// app.use('/api/dashboard', dashboardRoutes);
-// app.use('/api/mail', mailRoutes);
-// app.use('/api/meta', metaRoutes);
-// app.use('/api/notifications', notificationRoutes);
-// app.use('/api/future_que', futureRoutes);
 
-// app.use('/api/static', express.static(path.join(__dirname + '/uploads')));
 app.get('/api/overrides', (req, res)=>{
 	const workSheetsFromFile = xlsx.parse(`${__dirname}/overrides.xlsx`);
 	const items = workSheetsFromFile[0].data.slice(9, workSheetsFromFile[0].data.length);
 	res.send({headers:workSheetsFromFile[0].data[8],items});
+})
+
+app.get('/api/editableTransferable', (req, res)=>{
+	const workSheetsFromFile = xlsx.parse(`${__dirname}/editable_transferable.xlsx`);
+	const items = workSheetsFromFile[0].data.slice(1, workSheetsFromFile[0].data.length);
+	res.send({headers:workSheetsFromFile[0].data[0],items});
 })
 
 app.post('/api/db', (req,res)=>{

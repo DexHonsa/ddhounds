@@ -21,6 +21,9 @@
         <li @click="$router.push('/table')" class="header-btn">
           <i class="fal fa-table"></i>
         </li>
+        <li @click="$router.push('/table2')" class="header-btn">
+          <i style="color:#ff9900" class="fal fa-table"></i>
+        </li>
       </ul>
     </div>
     <div v-if="Object.keys(user).length > 0" class="header-nav">
