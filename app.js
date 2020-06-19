@@ -28,12 +28,27 @@ var MongoClient = require("mongodb").MongoClient;
 var ObjectId = require("mongodb").ObjectId;
 var axios = require('axios');
 var xlsx = require('node-xlsx').default;
+var multer = require('multer');
+var fs = require("fs-extra");
+var mkdirp = require("mkdirp");
 
 var sqlite3 = require('sqlite3').verbose();
 
 
 
 var URL = config.URL;
+
+const Storage = multer.diskStorage({
+    destination(req, file, callback) {
+      callback(null, './tmp/');
+    },
+    filename(req, file, callback) {
+      callback(null, file.originalname);
+    },
+  });
+
+
+const upload = multer({ storage: Storage });
 
 let db = new sqlite3.Database('./db/USCO_WD.db', (err) => {
 	if (err) {
@@ -57,15 +72,26 @@ app.use((req, res, next) => {
   }
   next();
 });
+app.use('/api/static', express.static(path.join(__dirname + '/uploads')));
 
-app.get('/api/overrides', (req, res)=>{
-	const workSheetsFromFile = xlsx.parse(`${__dirname}/overrides.xlsx`);
+app.post('/api/upload', upload.single('file'),  async (req,res)=>{
+	await fs.move("./tmp/" + req.file.filename, "./uploads/" + req.file.filename, { overwrite: true }, async function (err) {
+		if (err) {
+		await fs.remove("./tmp/" + req.file.filename);
+		res.status(500).send({message:'error'})
+		} 
+	});
+	res.status(200).send({message:'success'})
+})
+
+app.get('/api/overrides',(req, res)=>{
+	const workSheetsFromFile = xlsx.parse(`${__dirname}/uploads/overrides.xlsx`);
 	const items = workSheetsFromFile[0].data.slice(9, workSheetsFromFile[0].data.length);
 	res.send({headers:workSheetsFromFile[0].data[8],items});
 })
 
 app.get('/api/editableTransferable', (req, res)=>{
-	const workSheetsFromFile = xlsx.parse(`${__dirname}/editable_transferable.xlsx`);
+	const workSheetsFromFile = xlsx.parse(`${__dirname}/uploads/editable_transferable.xlsx`);
 	const items = workSheetsFromFile[0].data.slice(1, workSheetsFromFile[0].data.length);
 	res.send({headers:workSheetsFromFile[0].data[0],items});
 })

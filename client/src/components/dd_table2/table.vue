@@ -1,5 +1,27 @@
 <template>
   <div style="width:calc(100vw - 100px);">
+    <v-dialog v-model="upload" persistent max-width="600px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Upload a file</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container grid-list-md>
+            <v-layout wrap>
+              <v-flex xs12 sm6 md4>
+                <input ref="uploadFile" type="file" />
+              </v-flex>
+            </v-layout>
+          </v-container>
+          <small>*indicates required field</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" flat @click="upload = false">Close</v-btn>
+          <v-btn color="blue darken-1" flat @click="onUpload">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <transition enter-active-class="fadeInUp" leave-active-class="fadeOut">
       <div v-if="!isLoaded" class="loaderContainer animated-fast">
         <img src="@/img/double_loader.svg" alt />
@@ -7,6 +29,10 @@
     </transition>
     <div style="margin-bottom:25px;">
       <div class="name"></div>
+    </div>
+    <div>
+      <v-btn @click="download" dark :color="$vuetify.theme.lightGreen">Download</v-btn>
+      <v-btn @click="upload = true" dark :color="$vuetify.theme.lightGreen">Upload</v-btn>
     </div>
     <div class="table-container">
       <v-client-table :options="options" :data="tableData" :columns="columns">
@@ -76,6 +102,36 @@ export default {
   },
   computed: {},
   methods: {
+    async onUpload() {
+      let file = this.$refs.uploadFile.files[0];
+      let formData = new FormData();
+      formData.append("file", file, "editable_transferable.xlsx");
+      let group = this.active;
+
+      axios.post("/api/upload", formData).then(
+        res => {
+          window.location.reload();
+        },
+        err => {
+          window.alert(err.response.stringify());
+        }
+      );
+    },
+    download() {
+      var element = document.createElement("a");
+      element.setAttribute(
+        "href",
+        "https://ddhounds.com/api/static/editable_transferable.xlsx"
+      );
+      element.setAttribute("download", "editable_transferable.xlsx");
+
+      element.style.display = "none";
+      document.body.appendChild(element);
+
+      element.click();
+
+      document.body.removeChild(element);
+    },
     getData() {
       this.isLoaded = false;
       axios.get("/api/editableTransferable").then(res => {
