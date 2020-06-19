@@ -121,7 +121,7 @@ export default {
       var element = document.createElement("a");
       element.setAttribute(
         "href",
-        "https://ddhounds.com/api/static/editable_transferable.xlsx"
+        "https://ddbloodhounds.com/api/static/editable_transferable.xlsx"
       );
       element.setAttribute("download", "editable_transferable.xlsx");
 

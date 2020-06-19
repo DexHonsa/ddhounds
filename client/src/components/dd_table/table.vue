@@ -122,7 +122,7 @@ export default {
       var element = document.createElement("a");
       element.setAttribute(
         "href",
-        "https://ddhounds.com/api/static/overrides.xlsx"
+        "https://ddbloodhounds.com/api/static/overrides.xlsx"
       );
       element.setAttribute("download", "overrides.xlsx");
 
