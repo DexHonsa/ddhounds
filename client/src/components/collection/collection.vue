@@ -207,13 +207,8 @@
           class="animated-med"
           style="position:absolute;display: flex; flex-direction: column; justify-content:center; align-items: center; width:100%; height:80%;"
         >
-          <lottie
-            :options="defaultOptions"
-            :height="200"
-            :width="500"
-            v-on:animCreated="handleAnimation"
-          />
-          <br />
+          
+          <img src="@/img/double_loader.svg" alt="">
           <div
             style="color:#ffffff30; font-size: 10pt; text-transform: uppercase; letter-spacing: 2px;"
           >Loading...</div>

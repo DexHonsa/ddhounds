@@ -1,7 +1,7 @@
 <template>
   <div class="header-container">
     <div class="header-logo">
-      <img style="height:50px;" src="../img/dog_white.png" alt />
+      <img style="height:50px;" src="../img/brain.svg" alt />
     </div>
     <!-- <div class="header-search" :class="{'active':searchActive}">
       <i class="fal fa-search"></i>
@@ -94,7 +94,7 @@ export default {
       userOpen: false,
       notifications: [],
       unreadNotifications: [],
-      mailers: []
+      mailers: [],
     };
   },
   mounted() {
@@ -104,14 +104,14 @@ export default {
   methods: {
     getDocs() {
       axios.get("/api/files/get_docs/printable").then(
-        res => {
+        (res) => {
           this.mailers = res.data.docs;
         },
-        err => {}
+        (err) => {}
       );
     },
     downloadMailers() {
-      axios.get("/api/mail/download_mailers").then(res => {
+      axios.get("/api/mail/download_mailers").then((res) => {
         var link = document.createElement("a");
         link.download = "printable.zip";
         link.href = "/api/static/printable.zip";
@@ -119,12 +119,12 @@ export default {
       });
     },
     deleteMailers() {
-      axios.get("/api/mail/delete_mailers").then(res => {
+      axios.get("/api/mail/delete_mailers").then((res) => {
         window.location.reload();
       });
     },
     getNotifications() {
-      axios.get("/api/notifications/get_all/" + this.user.id).then(res => {
+      axios.get("/api/notifications/get_all/" + this.user.id).then((res) => {
         this.notifications = res.data;
         for (let i = 0; i < this.notifications.length; i++) {
           if (this.notifications[i].opened == false) {
@@ -152,7 +152,7 @@ export default {
       } else {
         this[page] = false;
       }
-    }
+    },
   },
   computed: {
     user() {
@@ -164,8 +164,8 @@ export default {
       } else {
         return false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
