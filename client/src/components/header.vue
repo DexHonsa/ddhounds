@@ -1,7 +1,7 @@
 <template>
   <div class="header-container">
     <div class="header-logo">
-      <img style="height:50px;" src="../img/brain.svg" alt />
+      <img style="height: 40px" src="../img/q.svg" alt />
     </div>
     <!-- <div class="header-search" :class="{'active':searchActive}">
       <i class="fal fa-search"></i>
@@ -22,7 +22,7 @@
           <i class="fal fa-table"></i>
         </li>
         <li @click="$router.push('/table2')" class="header-btn">
-          <i style="color:#ff9900" class="fal fa-table"></i>
+          <i style="color: #ff9900" class="fal fa-table"></i>
         </li>
       </ul>
     </div>
@@ -35,23 +35,37 @@
           v-show="false"
           @click="toggleDropdown('notificationsOpen')"
           class="header-btn"
-          :class="{'active':notificationsOpen}"
+          :class="{ active: notificationsOpen }"
         >
           <i class="fal fa-bell"></i>
-          <div v-if="unreadNotifications.length >0" class="not-icon">{{unreadNotifications.length}}</div>
-          <transition enter-active-class="fadeInLeft" leave-active-class="fadeOut">
+          <div v-if="unreadNotifications.length > 0" class="not-icon">
+            {{ unreadNotifications.length }}
+          </div>
+          <transition
+            enter-active-class="fadeInLeft"
+            leave-active-class="fadeOut"
+          >
             <div v-if="notificationsOpen" class="basic-dropdown">
               <div class="dropdown-chev"></div>
 
               <div class="notification-dropdown">
-                <div v-if="notifications.length == 0" class="notification-item">No New Notifications</div>
+                <div v-if="notifications.length == 0" class="notification-item">
+                  No New Notifications
+                </div>
                 <div
                   class="note-item"
-                  :class="[{'unread': !item.opened}, {'error':item.code == 'error'},{'success':item.code == 'success'}]"
+                  :class="[
+                    { unread: !item.opened },
+                    { error: item.code == 'error' },
+                    { success: item.code == 'success' },
+                  ]"
                   v-for="(item, index) in notifications"
                   :key="index"
                 >
-                  <i v-if="item.code == 'error'" class="fal fa-exclamation-triangle"></i>
+                  <i
+                    v-if="item.code == 'error'"
+                    class="fal fa-exclamation-triangle"
+                  ></i>
                   <i v-if="item.code == 'success'" class="fal fa-check"></i>
                   <div v-html="item.body"></div>
                 </div>
@@ -59,14 +73,21 @@
             </div>
           </transition>
         </li>
-        <li @click="toggleDropdown('userOpen')" class="header-btn" :class="{'active':userOpen}">
+        <li
+          @click="toggleDropdown('userOpen')"
+          class="header-btn"
+          :class="{ active: userOpen }"
+        >
           <i class="fal fa-user-circle"></i>
-          <transition enter-active-class="fadeInLeft" leave-active-class="fadeOut">
+          <transition
+            enter-active-class="fadeInLeft"
+            leave-active-class="fadeOut"
+          >
             <div v-if="userOpen" class="basic-dropdown">
               <div class="dropdown-chev"></div>
               <div class="user-info-container">
                 <div class="user-info-image">
-                  <img src="../img/mini_logo.png" style="width:100%;" alt />
+                  <img src="../img/mini_logo.png" style="width: 100%" alt />
                 </div>
                 <div class="user-info-name">Welcome!</div>
               </div>
