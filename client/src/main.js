@@ -6,8 +6,6 @@ import { store } from "./store/store.js";
 import VeeValidate from "vee-validate";
 import VTooltip from "v-tooltip";
 import VueNativeSock from 'vue-native-websocket'
-
-
 import VueCroppie from "vue-croppie";
 import Vuetify from 'vuetify';
 // import Loader from "vue-spinner/src/RingLoader.vue";

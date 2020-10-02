@@ -1,7 +1,6 @@
 <template>
   <v-app id="app">
     <router-view name="header"></router-view>
-    <router-view name="sidebar"></router-view>
     <router-view name="login"></router-view>
     <router-view class="inner-section" name="inner">
       <router-view name="footer"></router-view>
@@ -18,7 +17,7 @@ export default {
   name: "App",
 
   methods: {
-    ...mapActions(["setToken", "setUser"])
+    ...mapActions(["setToken", "setUser"]),
   },
   created() {
     // const token = localStorage.getItem("token");
@@ -48,8 +47,8 @@ export default {
   computed: {
     path() {
       return this.$route.path;
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

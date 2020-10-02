@@ -2,41 +2,11 @@ var express = require("express");
 var app = express();
 var path = require('path');
 var bodyParser = require("body-parser");
-var mongoose = require("mongoose");
-var router = express.Router();
-// var userRoutes = require("./routes/users");
-// var authRoutes = require("./routes/auth");
-// var clientRoutes = require("./routes/clients");
-// var paymentRoutes = require('./routes/payment');
-// var transactionRoutes = require('./routes/transactions');
-// var dashboardRoutes = require('./routes/dashboard');
-// var notificationRoutes = require('./routes/notifications');
-// var subscriptionsRoutes = require('./routes/subscriptions');
-// var mailRoutes = require('./routes/mail');
-// var fileRoutes = require('./routes/file');
-// var futureRoutes = require('./routes/future_que')
-// var timesheetRoutes = require('./routes/timesheet')
-// var metaRoutes = require('./routes/meta');
 var morgan = require("morgan");
-var nodemailer = require('nodemailer');
-var config = require('./config.js');
-// var smtpTransport = require("nodemailer-smtp-transport");
-var imdb = require('imdb-api');
-var smsRoutes = require('./routes/sms');
-var CronJob = require('cron').CronJob;
-var MongoClient = require("mongodb").MongoClient;
-var ObjectId = require("mongodb").ObjectId;
-var axios = require('axios');
 var xlsx = require('node-xlsx').default;
 var multer = require('multer');
 var fs = require("fs-extra");
-var mkdirp = require("mkdirp");
-
 var sqlite3 = require('sqlite3').verbose();
-
-
-
-var URL = config.URL;
 
 const Storage = multer.diskStorage({
     destination(req, file, callback) {

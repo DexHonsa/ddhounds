@@ -26,79 +26,6 @@
         </li>
       </ul>
     </div>
-    <div v-if="Object.keys(user).length > 0" class="header-nav">
-      <ul>
-        <li @click="$router.push('/dashboard')" class="header-btn">
-          <i class="fal fa-home"></i>
-        </li>
-        <li
-          v-show="false"
-          @click="toggleDropdown('notificationsOpen')"
-          class="header-btn"
-          :class="{ active: notificationsOpen }"
-        >
-          <i class="fal fa-bell"></i>
-          <div v-if="unreadNotifications.length > 0" class="not-icon">
-            {{ unreadNotifications.length }}
-          </div>
-          <transition
-            enter-active-class="fadeInLeft"
-            leave-active-class="fadeOut"
-          >
-            <div v-if="notificationsOpen" class="basic-dropdown">
-              <div class="dropdown-chev"></div>
-
-              <div class="notification-dropdown">
-                <div v-if="notifications.length == 0" class="notification-item">
-                  No New Notifications
-                </div>
-                <div
-                  class="note-item"
-                  :class="[
-                    { unread: !item.opened },
-                    { error: item.code == 'error' },
-                    { success: item.code == 'success' },
-                  ]"
-                  v-for="(item, index) in notifications"
-                  :key="index"
-                >
-                  <i
-                    v-if="item.code == 'error'"
-                    class="fal fa-exclamation-triangle"
-                  ></i>
-                  <i v-if="item.code == 'success'" class="fal fa-check"></i>
-                  <div v-html="item.body"></div>
-                </div>
-              </div>
-            </div>
-          </transition>
-        </li>
-        <li
-          @click="toggleDropdown('userOpen')"
-          class="header-btn"
-          :class="{ active: userOpen }"
-        >
-          <i class="fal fa-user-circle"></i>
-          <transition
-            enter-active-class="fadeInLeft"
-            leave-active-class="fadeOut"
-          >
-            <div v-if="userOpen" class="basic-dropdown">
-              <div class="dropdown-chev"></div>
-              <div class="user-info-container">
-                <div class="user-info-image">
-                  <img src="../img/mini_logo.png" style="width: 100%" alt />
-                </div>
-                <div class="user-info-name">Welcome!</div>
-              </div>
-              <span @click="$router.push('/profile')">Account</span>
-              <span class="divider"></span>
-              <span @click="logout">Logout</span>
-            </div>
-          </transition>
-        </li>
-      </ul>
-    </div>
   </div>
 </template>
 <script>
@@ -110,69 +37,18 @@ export default {
     return {
       searchActive: false,
       settings: false,
-      notificationsOpen: false,
       mailOpen: false,
       userOpen: false,
-      notifications: [],
-      unreadNotifications: [],
       mailers: [],
     };
   },
-  mounted() {
-    this.getNotifications();
-    this.getDocs();
-  },
+  mounted() {},
   methods: {
-    getDocs() {
-      axios.get("/api/files/get_docs/printable").then(
-        (res) => {
-          this.mailers = res.data.docs;
-        },
-        (err) => {}
-      );
-    },
-    downloadMailers() {
-      axios.get("/api/mail/download_mailers").then((res) => {
-        var link = document.createElement("a");
-        link.download = "printable.zip";
-        link.href = "/api/static/printable.zip";
-        link.click();
-      });
-    },
-    deleteMailers() {
-      axios.get("/api/mail/delete_mailers").then((res) => {
-        window.location.reload();
-      });
-    },
-    getNotifications() {
-      axios.get("/api/notifications/get_all/" + this.user.id).then((res) => {
-        this.notifications = res.data;
-        for (let i = 0; i < this.notifications.length; i++) {
-          if (this.notifications[i].opened == false) {
-            this.unreadNotifications.push(this.notifications[i]);
-          }
-        }
-      });
-    },
     logout() {
       auth.logout();
     },
     toggleSearchActive() {
       this.searchActive = !this.searchActive;
-    },
-    toggleDropdown(page) {
-      if (page == "notificationsOpen") {
-        console.log("hit");
-      }
-      if (!this[page]) {
-        this.settings = false;
-        this.userOpen = false;
-        this.notificationsOpen = false;
-        this.mailOpen = false;
-        this[page] = !this[page];
-      } else {
-        this[page] = false;
-      }
     },
   },
   computed: {

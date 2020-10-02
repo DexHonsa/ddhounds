@@ -43,10 +43,20 @@
           </div>
         </div>
       </transition>
-      <div style="display:flex;align-items:center;">
+      <div style="display: flex; align-items: center">
         <v-text-field
           v-model="term"
-          @keyup.enter.native="$router.push({ query: { page: 1,term:term, wildcards:wildcards, selector:selector } }), goSearch()"
+          @keyup.enter.native="
+            $router.push({
+              query: {
+                page: 1,
+                term: term,
+                wildcards: wildcards,
+                selector: selector,
+              },
+            }),
+              goSearch()
+          "
           label="Search"
         >
           <template v-slot:prepend-inner>
@@ -55,10 +65,18 @@
         </v-text-field>
         <div class="searchBarDropdown">
           <v-menu v-model="menu" offset-y :nudge-top="0" :nudge-left="0">
-            <template v-slot:activator="{on}">
-              <div class="activator" @click="menu = true" v-on:on="{on}">
-                {{selector}}
-                <i style="margin-left:10px;" class="fa fa-caret-down"></i>
+            <template v-slot:activator="{ on }">
+              <div
+                class="activator"
+                @click="menu = true"
+                v-on:on="
+                  {
+                    on;
+                  }
+                "
+              >
+                {{ selector }}
+                <i style="margin-left: 10px" class="fa fa-caret-down"></i>
               </div>
             </template>
             <v-card width="150">
@@ -69,24 +87,51 @@
         </div>
         <div class="searchBarDropdown">
           <v-menu v-model="menu2" offset-y :nudge-top="0" :nudge-left="0">
-            <template v-slot:activator="{on}">
-              <div class="activator" @click="menu2 = true" v-on:on="{on}">
-                {{wildcards ? 'Auto Wildcards On':'Auto Wildcards Off'}}
-                <i
-                  style="margin-left:10px;"
-                  class="fa fa-caret-down"
-                ></i>
+            <template v-slot:activator="{ on }">
+              <div
+                class="activator"
+                @click="menu2 = true"
+                v-on:on="
+                  {
+                    on;
+                  }
+                "
+              >
+                {{ wildcards ? "Auto Wildcards On" : "Auto Wildcards Off" }}
+                <i style="margin-left: 10px" class="fa fa-caret-down"></i>
               </div>
             </template>
             <v-card width="150">
               <div
-                @click="$router.push({ query: { page: 1,term:term, wildcards:'true', selector:selector }})"
+                @click="
+                  $router.push({
+                    query: {
+                      page: 1,
+                      term: term,
+                      wildcards: 'true',
+                      selector: selector,
+                    },
+                  })
+                "
                 class="list"
-              >Auto Wildcards On</div>
+              >
+                Auto Wildcards On
+              </div>
               <div
-                @click="$router.push({ query: { page: 1,term:term, wildcards:'false', selector:selector }}) "
+                @click="
+                  $router.push({
+                    query: {
+                      page: 1,
+                      term: term,
+                      wildcards: 'false',
+                      selector: selector,
+                    },
+                  })
+                "
                 class="list"
-              >Auto Wildcards Off</div>
+              >
+                Auto Wildcards Off
+              </div>
             </v-card>
           </v-menu>
         </div>
@@ -201,51 +246,85 @@
         </v-card>
         </v-menu>-->
       </div>
-      <transition enter-active-class="fadeInUp" leave-active-class="fadeOutDown">
+      <transition
+        enter-active-class="fadeInUp"
+        leave-active-class="fadeOutDown"
+      >
         <div
           v-if="isLoading"
           class="animated-med"
-          style="position:absolute;display: flex; flex-direction: column; justify-content:center; align-items: center; width:100%; height:80%;"
+          style="
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 80%;
+          "
         >
-          
-          <img src="@/img/double_loader.svg" alt="">
+          <img src="@/img/double_loader.svg" alt="" />
           <div
-            style="color:#ffffff30; font-size: 10pt; text-transform: uppercase; letter-spacing: 2px;"
-          >Loading...</div>
+            style="
+              color: #ffffff30;
+              font-size: 10pt;
+              text-transform: uppercase;
+              letter-spacing: 2px;
+            "
+          >
+            Loading...
+          </div>
         </div>
       </transition>
       <div v-if="!isLoading">
-        <div style="display:flex; align-items:center">
+        <div style="display: flex; align-items: center">
           Names Fetched:
-          <b style="margin-left:10px;">{{numberWithCommas(total)}}</b>
+          <b style="margin-left: 10px">{{ numberWithCommas(total) }}</b>
         </div>
         <v-client-table
           v-if="isLoaded"
           :data="names"
-          :columns="['titles','name','heading_type']"
+          :columns="['titles', 'name', 'heading_type']"
           :options="options"
           @sorted="sortMe"
         >
           <template slot="h__titles">Titles</template>
-          <div slot="titles" style="max-width:50px;" slot-scope="{row}">{{row.titles}}</div>
-          <div slot="name" style="max-width:100px; max-height:25px;" slot-scope="{row}">
-            <a
-              style="white-space:nowrap"
-              :href="'https://cocatalog.loc.gov/cgi-bin/Pwebrecon.cgi?Search_Arg='+encodeURI(row.name)+'&Search_Code=NALL&PID=hBQj691uHaCn8-FBu6zG2Gzgt4&SEQ=20200424172040&CNT=25&HIST=1'"
-              target="_blank"
-            >{{row.name}}</a>
+          <div slot="titles" style="max-width: 50px" slot-scope="{ row }">
+            {{ row.titles }}
           </div>
-          <div slot="heading_type" slot-scope="{row}">{{row.heading_type}}</div>
+          <div
+            slot="name"
+            style="max-width: 100px; max-height: 25px"
+            slot-scope="{ row }"
+          >
+            <a
+              style="white-space: nowrap"
+              :href="
+                'https://cocatalog.loc.gov/cgi-bin/Pwebrecon.cgi?Search_Arg=' +
+                encodeURI(row.name) +
+                '&Search_Code=NALL&PID=hBQj691uHaCn8-FBu6zG2Gzgt4&SEQ=20200424172040&CNT=25&HIST=1'
+              "
+              target="_blank"
+              >{{ row.name }}</a
+            >
+          </div>
+          <div slot="heading_type" slot-scope="{ row }">
+            {{ row.heading_type }}
+          </div>
 
           <div
             slot="monthly_payment_amount"
-            style="text-transform:capitalize"
-            slot-scope="{row}"
-          >{{row.monthly_payment_amount}}</div>
+            style="text-transform: capitalize"
+            slot-scope="{ row }"
+          >
+            {{ row.monthly_payment_amount }}
+          </div>
         </v-client-table>
-        <div style="display:flex; align-items:center;">
-          <div v-if="page > 1" @click="previousPage" class="next-page">Previous Page</div>
-          <div>Page: {{page}}</div>
+        <div style="display: flex; align-items: center">
+          <div v-if="page > 1" @click="previousPage" class="next-page">
+            Previous Page
+          </div>
+          <div>Page: {{ page }}</div>
           <div @click="nextPage" class="next-page">Next Page</div>
         </div>
       </div>
@@ -289,7 +368,7 @@ export default {
       columnSort: "first_name",
       activeFilter: null,
       defaultOptions: { animationData, loop: true },
-      animationSpeed: 1.3
+      animationSpeed: 1.3,
     };
   },
   mounted() {
@@ -304,13 +383,13 @@ export default {
     },
     wildcards(val) {
       this.getNames();
-    }
+    },
   },
   methods: {
     numberWithCommas(x) {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
-    handleAnimation: function(anim) {
+    handleAnimation: function (anim) {
       this.anim = anim;
       this.anim.setSpeed(this.animationSpeed);
     },
@@ -326,16 +405,16 @@ export default {
           limit: 250,
           page: this.page,
           filters: [{ type: this.activeDataType }],
-          selector: this.selector
+          selector: this.selector,
         })
         .then(
-          res => {
+          (res) => {
             this.isLoading = false;
             this.isLoaded = true;
             this.total = res.data.total;
             this.names = res.data.items;
           },
-          err => {
+          (err) => {
             this.isLoading = false;
             this.isLoaded = true;
             this.total = 0;
@@ -369,7 +448,7 @@ export default {
 
       t = t.replace(
         new RegExp(text, "gi"),
-        str => `<span class='highlight'>${str}</span>`
+        (str) => `<span class='highlight'>${str}</span>`
       );
 
       return this.formatPhone(t);
@@ -425,16 +504,16 @@ export default {
             max: this.filterMax,
             value: this.filterValue,
             startDate: this.filterStartDate,
-            operator: this.filterOperator
-          }
+            operator: this.filterOperator,
+          },
         ],
         sort: this.filterSort,
         sortName: this.filter,
         type: "all",
         page: this.page,
-        creditor: this.$store.state.userStore.user.creditor
+        creditor: this.$store.state.userStore.user.creditor,
       };
-      axios.post("/api/clients/search", post).then(res => {
+      axios.post("/api/clients/search", post).then((res) => {
         this.clients = res.data.items;
         this.total = res.data.total;
         this.isLoaded = true;
@@ -442,7 +521,9 @@ export default {
     },
     getDataType(filter, i) {
       console.log(filter);
-      this.activeFilter = this.columns.filter(item => item.value == filter)[0];
+      this.activeFilter = this.columns.filter(
+        (item) => item.value == filter
+      )[0];
       var arr = this.columns.filter((item, i) => {
         return item.value == filter;
       });
@@ -467,8 +548,8 @@ export default {
           page: Number(this.page) + 1,
           wildcards: this.wildcards,
           selector: this.selector,
-          term: this.term
-        }
+          term: this.term,
+        },
       });
       this.goSearch();
     },
@@ -479,8 +560,8 @@ export default {
           page: Number(this.page) - 1,
           wildcards: this.wildcards,
           selector: this.selector,
-          term: this.term
-        }
+          term: this.term,
+        },
       });
       this.goSearch();
     },
@@ -523,10 +604,10 @@ export default {
       } else {
         return moment(date2).format("MM/DD/YYYY");
       }
-    }
+    },
   },
   components: {
-    Lottie
+    Lottie,
   },
   computed: {
     wildcards() {
@@ -541,7 +622,7 @@ export default {
         { label: "Account Number", value: "account_number" },
         { label: "Name", value: "name" },
         { label: "Address", value: "address" },
-        { label: "Phone Numbers", value: "phone" }
+        { label: "Phone Numbers", value: "phone" },
       ];
     },
     page() {
@@ -557,8 +638,8 @@ export default {
             max: this.filterMax,
             value: this.filterValue,
             startDate: this.filterStartDate,
-            operator: this.filterOperator
-          }
+            operator: this.filterOperator,
+          },
         ];
       } else {
         return [];
@@ -572,31 +653,11 @@ export default {
           label: "Header Type",
           value: "header_type",
           options: ["personal", "corporate"],
-          type: "string"
-        }
+          type: "string",
+        },
       ];
     },
-    columnLabels() {
-      // return this.columns.map((item, i) => {
-      //   return item.value;
-      // });
 
-      var columns = [
-        "name",
-        "phone",
-        "cellphone",
-        "city",
-        "state",
-        "account_number",
-        "creditor",
-        "date_of_notice",
-        "creditors_total_due"
-      ];
-      if (this.filter != "") {
-        columns.push(this.filter.toLowerCase().replace(" ", "_"));
-      }
-      return columns;
-    },
     options() {
       return {
         perPage: 250,
@@ -604,17 +665,40 @@ export default {
           base: "fa",
           up: "fa-caret-down",
           down: "fa-caret-up",
-          is: ""
+          is: "",
         },
         sortingAlgorithm: (data, column) => {
           return data;
-        }
+        },
       };
-    }
-  }
+    },
+  },
 };
 </script>
 <style>
+.VueTables__search,
+.VueTables__limit {
+  display: none !important;
+}
+.inner-section {
+  margin-left: 80px;
+  min-height: calc(100vh - 70px);
+}
+.stage-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+.inner-stage {
+  margin-left: -150px;
+  width: 100%;
+  max-width: 1500px;
+  padding: 45px;
+  width: calc(100% - 80px);
+  position: relative;
+  background-color: #fff;
+  color: #444;
+}
 .table td {
   padding: 3px 10px !important;
 }
