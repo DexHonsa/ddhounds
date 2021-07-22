@@ -53,7 +53,7 @@
     "vue-lottie": "^0.2.1",
     "vuex-persistedstate": "^2.5.4",
     "ws": "^7.1.1",
-    "xlsx": "^0.12.12"
+    "xlsx": "^0.17.0"
   },
   "author": "Dex",
   "license": "ISC",
