@@ -19,7 +19,7 @@
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.5",
     "moment": "^2.24.0",
-    "node-sass": "^4.7.2",
+    "node-sass": "^7.0.0",
     "postcss-flexbugs-fixes": "^3.3.0",
     "pusher-js": "^4.2.2",
     "register-service-worker": "^1.0.0",
